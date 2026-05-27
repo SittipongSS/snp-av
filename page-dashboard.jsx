@@ -269,24 +269,24 @@ function PublicHome({ onNav, auth = {role:'public'} }) {
               ข่าวสารบนเว็บโรงเรียน <I.chevR size={14}/>
             </a>
           </div>
-          <div className="pr-news-grid">
+          <div className="pr-news-list">
             {ANNOUNCES.slice(0, 3).map((a, i) => (
-              <div key={i} className="pr-news-card">
-                <div className="pr-news-icon" style={{color: a.pin ? 'var(--gold-500)' : 'var(--navy-500)'}}>
+              <div key={i} className={"pr-news-item" + (a.pin ? " pin" : "")}>
+                <div className="pr-news-item-icon" style={{color: a.pin ? 'var(--gold-500)' : 'var(--navy-500)'}}>
                   {a.pin ? <I.pin size={18}/> : <I.info size={18}/>}
                 </div>
-                <div className="pr-news-body">
-                  <div className="pr-news-title-row">
-                    <span className="pr-news-title">{a.title}</span>
-                    {a.pin && <span className="badge gold" style={{fontSize:10, padding:'2px 6px'}}><span className="dot"/>ปักหมุด</span>}
+                <div className="pr-news-item-content">
+                  <div className="pr-news-item-title-row">
+                    <span className="pr-news-item-title">{a.title}</span>
+                    {a.pin && <span className="badge gold" style={{fontSize:10, padding:'2px 6px', height:'fit-content'}}><span className="dot"/>ปักหมุด</span>}
+                    <span className="pr-news-item-meta" style={{marginLeft:'auto', fontSize:11, color:'var(--text-subtle)', fontFamily:'var(--font-mono)'}}>{a.when}</span>
                   </div>
-                  <div className="pr-news-meta" style={{fontSize:11, color:'var(--text-subtle)', marginTop:4, fontFamily:'var(--font-mono)'}}>{a.when}</div>
-                  <div className="pr-news-desc" style={{fontSize:13, color:'var(--text-muted)', marginTop:8, lineHeight:1.5}}>{a.body}</div>
-                  <div style={{marginTop:12}}>
-                    <a href="https://www.sainampeung.ac.th/prpublic/" target="_blank" rel="noopener noreferrer" className="pr-news-link" style={{fontSize:12.5, fontWeight:600, color:'var(--navy-600)', textDecoration:'none', display:'inline-flex', alignItems:'center', gap:4}}>
-                      อ่านรายละเอียด <I.chevR size={12}/>
-                    </a>
-                  </div>
+                  <div className="pr-news-item-desc">{a.body}</div>
+                </div>
+                <div className="pr-news-item-action">
+                  <a href="https://www.sainampeung.ac.th/prpublic/" target="_blank" rel="noopener noreferrer" className="pr-news-link" style={{fontSize:12.5, fontWeight:600, color:'var(--navy-600)', textDecoration:'none', display:'inline-flex', alignItems:'center', gap:4}}>
+                    อ่านรายละเอียด <I.chevR size={12}/>
+                  </a>
                 </div>
               </div>
             ))}

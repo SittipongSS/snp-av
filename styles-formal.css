@@ -1762,50 +1762,89 @@ table.tbl tbody tr:last-child td { border-bottom: none; }
 /* ============ New styles for PublicHome restructure & RoomDetail ============ */
 
 /* PR News Section */
-.pr-news-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+.pr-news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   margin-top: 24px;
 }
-.pr-news-card {
+.pr-news-item {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
-  padding: 20px;
+  padding: 16px 20px;
   display: flex;
-  gap: 16px;
+  align-items: center;
+  gap: 20px;
   transition: transform 150ms, box-shadow 150ms, border-color 150ms;
+  position: relative;
+  overflow: hidden;
 }
-.pr-news-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
+.pr-news-item:hover {
+  transform: translateX(4px);
+  box-shadow: var(--shadow-sm);
   border-color: var(--gold-300);
 }
-.pr-news-icon {
+.pr-news-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 4px;
+  background: var(--navy-500);
+}
+.pr-news-item.pin {
+  background: linear-gradient(135deg, var(--gold-50), var(--surface) 60%);
+  border-color: var(--gold-200);
+}
+.pr-news-item.pin::before {
+  background: var(--gold-400);
+}
+.pr-news-item-icon {
   flex-shrink: 0;
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 99px;
   background: var(--bg-sunken);
   display: grid;
   place-items: center;
 }
-.pr-news-body {
-  flex: 1;
+.pr-news-item.pin .pr-news-item-icon {
+  background: var(--gold-50);
+  color: var(--gold-500);
+  border-color: var(--gold-300);
 }
-.pr-news-title-row {
+.pr-news-item-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.pr-news-item-title-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
 }
-.pr-news-title {
+.pr-news-item-title {
   font-family: var(--font-display);
-  font-size: 15px;
+  font-size: 15.5px;
   font-weight: 700;
   color: var(--navy-800);
   line-height: 1.4;
+}
+.pr-news-item-meta {
+  font-size: 11px;
+  color: var(--text-subtle);
+  font-family: var(--font-mono);
+}
+.pr-news-item-desc {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.pr-news-item-action {
+  flex-shrink: 0;
 }
 
 /* Social Links Section */
@@ -1947,13 +1986,29 @@ table.tbl tbody tr:last-child td { border-bottom: none; }
 
 /* Media Queries for Responsiveness */
 @media (max-width: 960px) {
-  .pr-news-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
   .social-links-grid {
     grid-template-columns: 1fr;
     gap: 16px;
+  }
+}
+@media (max-width: 768px) {
+  .pr-news-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+  }
+  .pr-news-item-action {
+    align-self: flex-end;
+  }
+  .pr-news-item-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    width: 100%;
+  }
+  .pr-news-item-meta {
+    margin-left: 0 !important;
   }
 }
 
