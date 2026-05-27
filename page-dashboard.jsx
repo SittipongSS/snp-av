@@ -262,7 +262,7 @@ function PublicHome({ onNav, auth = {role:'public'} }) {
         <div className="land-inner">
           <div className="section-head section-head-row">
             <div>
-              <div className="section-title">ข่าวประชาสัมพันธ์<span className="accent">ฝ่ายโสตฯ</span></div>
+              <div className="section-title">ข่าวประชาสัมพันธ์</div>
               <div className="section-sub">ข่าวประกาศ ล่าสุด และลิงก์ไปยังข้อมูลประชาสัมพันธ์ของโรงเรียน</div>
             </div>
             <a href="https://www.sainampeung.ac.th/prpublic/" target="_blank" rel="noopener noreferrer" className="btn-pill gold" style={{textDecoration:'none', display:'inline-flex', alignItems:'center', gap:6}}>
@@ -386,7 +386,7 @@ function Information({ auth = {role:'public'} }) {
       {/* 2. ข่าวประชาสัมพันธ์โรงเรียน */}
       <div className="card">
         <div className="card-head">
-          <h3>ข่าวประชาสัมพันธ์โรงเรียน</h3>
+          <h3>ข่าวประชาสัมพันธ์</h3>
           <a href="https://www.sainampeung.ac.th/prpublic/" target="_blank" rel="noopener noreferrer"
             className="btn ghost sm" style={{marginLeft:'auto', display:'inline-flex', alignItems:'center', gap:4}}>
             เว็บไซต์โรงเรียน <I.chevR size={12}/>
