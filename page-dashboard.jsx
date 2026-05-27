@@ -355,17 +355,17 @@ function Information({ auth = {role:'public'} }) {
       <div className="page-head">
         <div>
           <div className="title">ข่าวสารและประกาศ</div>
-          <div className="sub">ฝ่ายโสตทัศนศึกษา · ไทม์ไลน์ · ข่าวสาร · Facebook · เอกสาร</div>
+          <div className="sub">ฝ่ายโสตทัศนศึกษา · ไทม์ไลน์กิจกรรม · ข่าวประชาสัมพันธ์</div>
         </div>
         <div className="actions">
           {isAdmin && <button className="btn primary"><I.plus size={14}/> สร้างประกาศ</button>}
         </div>
       </div>
 
-      {/* 1. ไทม์ไลน์ฝ่ายโสตฯ */}
+      {/* 1. ไทม์ไลน์กิจกรรม */}
       <div className="card">
         <div className="card-head">
-          <h3>ไทม์ไลน์ฝ่ายโสตฯ</h3>
+          <h3>ไทม์ไลน์กิจกรรม (อัพเดท 1 ครั้งจะครอบคลุม 1 เทอม)</h3>
           <span className="badge gold">{TIMELINE.length} กิจกรรม</span>
           {isAdmin && <button className="btn ghost sm" style={{marginLeft:'auto'}}><I.plus size={13}/> เพิ่มกิจกรรม</button>}
         </div>
@@ -383,12 +383,12 @@ function Information({ auth = {role:'public'} }) {
         </div>
       </div>
 
-      {/* 2. ข่าวประชาสัมพันธ์ */}
+      {/* 2. ข่าวประชาสัมพันธ์โรงเรียน */}
       <div className="card">
         <div className="card-head">
-          <h3>ข่าวประชาสัมพันธ์</h3>
+          <h3>ข่าวประชาสัมพันธ์โรงเรียน</h3>
           <a href="https://www.sainampeung.ac.th/prpublic/" target="_blank" rel="noopener noreferrer"
-            className="btn ghost sm" style={{marginLeft:'auto'}}>
+            className="btn ghost sm" style={{marginLeft:'auto', display:'inline-flex', alignItems:'center', gap:4}}>
             เว็บไซต์โรงเรียน <I.chevR size={12}/>
           </a>
           {isAdmin && <button className="btn primary sm"><I.plus size={13}/> สร้างประกาศ</button>}
@@ -405,67 +405,6 @@ function Information({ auth = {role:'public'} }) {
                 </div>
                 <div className="body">{a.body}</div>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* 3. Facebook cards */}
-      <div className="fb-grid">
-        <FBCard
-          page="โรงเรียนสายน้ำผึ้ง ในพระอุปถัมภ์ฯ"
-          handle="@SainampeungSchool"
-          href="https://www.facebook.com/share/1Ap8RkkfLM/?mibextid=wwXIfr"
-          desc="ข่าวสาร กิจกรรม และความภาคภูมิใจของนักเรียนสายน้ำผึ้ง อัปเดตทุกวัน"
-          likes="12,408" followers="13,920"
-          posts={[
-            {text:"ขอแสดงความยินดีกับนักเรียน ม.6 ที่สอบติดมหาวิทยาลัย TCAS รอบ 1 ประจำปีการศึกษา 2568 จำนวน 127 คน 🎓", time:"2 ชม.ที่แล้ว", likes:284},
-            {text:"📢 ประกาศ: วันจันทร์ที่ 26 พ.ค. ให้นักเรียนทุกระดับชั้นแต่งกายชุดนักเรียน", time:"เมื่อวาน", likes:156},
-          ]}
-          color="var(--navy-600)"
-        />
-        <FBCard
-          page="ชมรมโสตทัศนศึกษา สายน้ำผึ้ง"
-          handle="@SNP.AVclub"
-          href="https://www.facebook.com/share/1ajdqCeT9X/?mibextid=wwXIfr"
-          desc="ชมรมโสตทัศนศึกษา โรงเรียนสายน้ำผึ้ง ผลิตสื่อ ถ่ายภาพ ไลฟ์สด และดูแลระบบเสียง-แสง"
-          likes="3,847" followers="4,210"
-          posts={[
-            {text:"🎬 Behind the scenes: ทีมชมรมเตรียมพร้อมระบบไลฟ์สตรีมสำหรับงานวันสุนทรภู่ 26 มิ.ย. นี้", time:"3 ชม.ที่แล้ว", likes:98},
-            {text:"📸 ผลงานภาพถ่ายจากกิจกรรมไหว้ครูปีการศึกษา 2568 ชมรูปเพิ่มเติมได้ที่แกลเลอรีฝ่ายโสตฯ", time:"3 วันที่แล้ว", likes:201},
-          ]}
-          color="var(--gold-500)"
-        />
-      </div>
-
-      {/* 4. เอกสาร & ระเบียบ */}
-      <div className="card">
-        <div className="card-head">
-          <h3>เอกสาร &amp; ระเบียบ</h3>
-          <span className="badge">PDF · DOCX</span>
-          {isAdmin && <button className="btn ghost sm" style={{marginLeft:'auto'}}><I.plus size={13}/> เพิ่มเอกสาร</button>}
-        </div>
-        <div className="col" style={{gap:6}}>
-          {[
-            ["ระเบียบการใช้ห้องโสตทัศนศึกษา ปีการศึกษา 2568", "230 KB · PDF", "อ.สมพร"],
-            ["แบบฟอร์มขอใช้ห้องประชุม", "85 KB · DOCX", "ฝ่ายธุรการ"],
-            ["คู่มือการใช้กล้อง Sony A7 III ฉบับย่อ", "1.2 MB · PDF", "อ.ศุภลักษณ์"],
-            ["แบบฟอร์มยืม-คืนพัสดุ (ฉบับแก้ไข พ.ค. 68)", "120 KB · PDF", "อ.พิมพ์ชนก"],
-            ["รายชื่อสมาชิกชมรมโสตฯ ภาคเรียน 1/2568", "65 KB · PDF", "อ.ฐิติมา"],
-          ].map((row, i) => (
-            <div key={i} className="row" style={{padding:'10px 4px', borderBottom:'1px dashed var(--border)'}}>
-              <div className="row" style={{gap:10, flex:1}}>
-                <div style={{
-                  width:32, height:32, borderRadius:'var(--r)',
-                  background:'var(--navy-50)', color:'var(--navy-600)',
-                  display:'grid', placeItems:'center',
-                }}><I.info size={15}/></div>
-                <div>
-                  <div style={{fontSize:13, fontWeight:500}}>{row[0]}</div>
-                  <div className="mono" style={{fontSize:10.5, color:'var(--text-subtle)'}}>{row[1]} · {row[2]}</div>
-                </div>
-              </div>
-              <button className="btn ghost sm"><I.download size={13}/></button>
             </div>
           ))}
         </div>
