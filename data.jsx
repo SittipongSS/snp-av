@@ -1,0 +1,140 @@
+// SNP AV — Mock data
+const TEACHERS = [
+  { id: "T01", name: "อาจารย์ สมพร วัฒนากุล",  role: "หัวหน้าฝ่ายโสตทัศนศึกษา",   subj: "เทคโนโลยีสารสนเทศ",  ext: "1208", initial: "สพ", years: 18 },
+  { id: "T02", name: "อาจารย์ ปิยะนุช ศรีสุข",  role: "รองหัวหน้าฝ่าย",         subj: "ศิลปะ", ext: "1209", initial: "ปน", years: 12 },
+  { id: "T03", name: "อาจารย์ ธนกฤต รัตนพงษ์",  role: "ผู้ดูแลห้องโสตฯ",       subj: "คอมพิวเตอร์", ext: "1212", initial: "ธก", years: 9 },
+  { id: "T04", name: "อาจารย์ วราภรณ์ ทองคำ",  role: "ผู้ดูแลห้องประชุม",     subj: "ภาษาไทย", ext: "1215", initial: "วภ", years: 14 },
+  { id: "T05", name: "อาจารย์ ณัฐวุฒิ บุญมา",   role: "ผู้ดูแลห้อง 8103",      subj: "วิทยาศาสตร์", ext: "1220", initial: "ณว", years: 7 },
+  { id: "T06", name: "อาจารย์ พิมพ์ชนก เกษม",  role: "งานพัสดุ-ครุภัณฑ์",     subj: "คหกรรม", ext: "1233", initial: "พช", years: 11 },
+  { id: "T07", name: "อาจารย์ ชาญวิทย์ สมบูรณ์", role: "ช่างเทคนิคเสียง/แสง",   subj: "เทคโนโลยี", ext: "1240", initial: "ชว", years: 16 },
+  { id: "T08", name: "อาจารย์ ศุภลักษณ์ ใจดี",   role: "งานถ่ายภาพ-วีดิทัศน์",  subj: "ศิลปะ", ext: "1241", initial: "ศล", years: 6 },
+  { id: "T09", name: "อาจารย์ กิตติพงษ์ แก้วใส", role: "งานประชาสัมพันธ์",      subj: "สังคมศึกษา", ext: "1245", initial: "กพ", years: 8 },
+  { id: "T10", name: "อาจารย์ ฐิติมา จันทรา",   role: "เลขานุการฝ่าย",         subj: "ภาษาอังกฤษ", ext: "1250", initial: "ฐม", years: 5 },
+];
+
+const STUDENTS = [
+  { id: "S401", name: "ด.ญ. นภัสสร พงษ์ศิริ",   role: "ประธานชมรม",        cls: "ม.6/2", initial: "นภ", div: "กล้องและภาพนิ่ง" },
+  { id: "S402", name: "ด.ญ. กมลชนก ใสสะอาด",   role: "รองประธาน",         cls: "ม.6/1", initial: "กม", div: "ตัดต่อวีดิทัศน์" },
+  { id: "S403", name: "ด.ญ. ธัญพร เสรีภาพ",     role: "เลขานุการ",         cls: "ม.5/3", initial: "ธญ", div: "เอกสาร" },
+  { id: "S404", name: "ด.ญ. พิมพิกา หิรัญ",     role: "เหรัญญิก",          cls: "ม.5/4", initial: "พก", div: "เอกสาร" },
+  { id: "S405", name: "ด.ญ. ภัทรานิษฐ์ สวยงาม", role: "ฝ่ายเสียง",         cls: "ม.6/3", initial: "ภท", div: "เสียงและไมโครโฟน" },
+  { id: "S406", name: "ด.ญ. ชนิตา ทองดี",       role: "ฝ่ายเสียง",         cls: "ม.5/2", initial: "ชน", div: "เสียงและไมโครโฟน" },
+  { id: "S407", name: "ด.ญ. ปานวาด มณีรัตน์",   role: "ฝ่ายแสง",           cls: "ม.6/1", initial: "ปว", div: "แสง" },
+  { id: "S408", name: "ด.ญ. ปริยา เพชรงาม",     role: "ฝ่ายแสง",           cls: "ม.5/1", initial: "ปย", div: "แสง" },
+  { id: "S409", name: "ด.ญ. ณัฏฐณิชา รุ่งเรือง", role: "ฝ่ายถ่ายภาพ",       cls: "ม.6/2", initial: "ณช", div: "กล้องและภาพนิ่ง" },
+  { id: "S410", name: "ด.ญ. ปุณณภา เกียรติยศ",  role: "ฝ่ายถ่ายภาพ",       cls: "ม.5/3", initial: "ปณ", div: "กล้องและภาพนิ่ง" },
+  { id: "S411", name: "ด.ญ. ธีรดา ภัทรกุล",     role: "ฝ่ายถ่ายภาพ",       cls: "ม.4/2", initial: "ธด", div: "กล้องและภาพนิ่ง" },
+  { id: "S412", name: "ด.ญ. นันท์นภัส อ่อนหวาน", role: "ฝ่ายวีดิทัศน์",     cls: "ม.6/1", initial: "นน", div: "ตัดต่อวีดิทัศน์" },
+  { id: "S413", name: "ด.ญ. ภคพร สุนทรกิจ",     role: "ฝ่ายวีดิทัศน์",     cls: "ม.5/2", initial: "ภพ", div: "ตัดต่อวีดิทัศน์" },
+  { id: "S414", name: "ด.ญ. ปาลิดา รุจิเรข",    role: "ฝ่ายวีดิทัศน์",     cls: "ม.4/3", initial: "ปด", div: "ตัดต่อวีดิทัศน์" },
+  { id: "S415", name: "ด.ญ. กชพร พัฒนาการ",     role: "ฝ่ายกราฟิก",        cls: "ม.6/3", initial: "กช", div: "กราฟิก" },
+  { id: "S416", name: "ด.ญ. ปวริศา ขจรกิจ",     role: "ฝ่ายกราฟิก",        cls: "ม.5/1", initial: "ปร", div: "กราฟิก" },
+  { id: "S417", name: "ด.ญ. ธมลวรรณ ผ่องใส",   role: "ฝ่ายกราฟิก",        cls: "ม.4/1", initial: "ธว", div: "กราฟิก" },
+  { id: "S418", name: "ด.ญ. ปุณยนุช วิเศษ",     role: "ฝ่ายไลฟ์สด",        cls: "ม.6/2", initial: "ปน", div: "ไลฟ์สตรีม" },
+  { id: "S419", name: "ด.ญ. รุ่งฤดี เจริญสุข",  role: "ฝ่ายไลฟ์สด",        cls: "ม.5/4", initial: "รฤ", div: "ไลฟ์สตรีม" },
+  { id: "S420", name: "ด.ญ. ชาลิสา ปัญญาเลิศ",  role: "ฝ่ายไลฟ์สด",        cls: "ม.5/3", initial: "ชส", div: "ไลฟ์สตรีม" },
+  { id: "S421", name: "ด.ญ. ปทิตตา ลีลาวดี",    role: "ฝ่ายเอกสาร",        cls: "ม.4/2", initial: "ปต", div: "เอกสาร" },
+  { id: "S422", name: "ด.ญ. ธารทิพย์ ภิรมย์",   role: "ฝ่ายเอกสาร",        cls: "ม.4/1", initial: "ธท", div: "เอกสาร" },
+  { id: "S423", name: "ด.ญ. ณิชารีย์ สิริพร",   role: "ฝ่ายต้อนรับ",       cls: "ม.4/3", initial: "ณร", div: "ต้อนรับ" },
+  { id: "S424", name: "ด.ญ. กานต์ธิดา รัตนากร", role: "ฝ่ายต้อนรับ",       cls: "ม.4/2", initial: "กธ", div: "ต้อนรับ" },
+  { id: "S425", name: "ด.ญ. ปาณิสรา หอมหวาน",  role: "ฝ่ายต้อนรับ",       cls: "ม.4/1", initial: "ปส", div: "ต้อนรับ" },
+  { id: "S426", name: "ด.ญ. วริศรา พงศ์ภัค",   role: "ฝ่ายเทคนิค",        cls: "ม.5/2", initial: "วศ", div: "เทคนิคไอที" },
+  { id: "S427", name: "ด.ญ. มนัสนันท์ ดารากร",  role: "ฝ่ายเทคนิค",        cls: "ม.5/1", initial: "มน", div: "เทคนิคไอที" },
+  { id: "S428", name: "ด.ญ. พิชชาภา รัตนกุล",  role: "ฝ่ายเทคนิค",        cls: "ม.4/3", initial: "พช", div: "เทคนิคไอที" },
+  { id: "S429", name: "ด.ญ. ลภัสรดา จันทร์เพ็ญ",role: "ฝ่ายโซเชียลมีเดีย", cls: "ม.6/2", initial: "ลด", div: "โซเชียลมีเดีย" },
+  { id: "S430", name: "ด.ญ. ธัญชนก ขวัญใจ",    role: "ฝ่ายโซเชียลมีเดีย", cls: "ม.5/4", initial: "ธช", div: "โซเชียลมีเดีย" },
+];
+
+const ROOMS = [
+  { id: "av",      name: "ห้องโสตทัศนศึกษา",  short: "ห้องโสตฯ", cap: 120, swatch: "var(--gold-400)", floor: "อาคาร 8 ชั้น 1" },
+  { id: "meeting", name: "ห้องประชุม",       short: "ห้องประชุม", cap: 40,  swatch: "#6ab2e4", floor: "อาคาร 8 ชั้น 2" },
+  { id: "8103",    name: "ห้อง 8103",        short: "ห้อง 8103",  cap: 50,  swatch: "#c895d8", floor: "อาคาร 8 ชั้น 1" },
+];
+
+// Events for the current week (rendered Mon..Sun). h = start hour (24h, decimals ok). dur = hours.
+const BOOKINGS = [
+  { day: 0, room: "av",      h: 8.5,  dur: 1.5, title: "ปฐมนิเทศ ม.1",          who: "ฝ่ายปกครอง · 280 คน",     status: "confirmed" },
+  { day: 0, room: "meeting", h: 13,   dur: 2,   title: "ประชุมคณะกรรมการ",     who: "ฝ่ายบริหาร · 15 คน",       status: "confirmed" },
+  { day: 0, room: "8103",    h: 14.5, dur: 1,   title: "ติว O-NET คณิต",        who: "ม.6 · อ.ปรียา",            status: "confirmed" },
+  { day: 1, room: "av",      h: 9,    dur: 2,   title: "อบรมเทคโนโลยี",        who: "ครู · 60 คน",              status: "confirmed" },
+  { day: 1, room: "8103",    h: 11,   dur: 1,   title: "ติว PAT ฟิสิกส์",       who: "ม.6 · อ.สมชาย",            status: "confirmed" },
+  { day: 1, room: "meeting", h: 14,   dur: 1.5, title: "ประชุมฝ่ายวิชาการ",    who: "หัวหน้ากลุ่มสาระ",         status: "confirmed" },
+  { day: 2, room: "av",      h: 13,   dur: 3,   title: "ซ้อมพิธีเปิด",         who: "ชมรมโสตฯ · ทั้งหมด",       status: "confirmed" },
+  { day: 2, room: "meeting", h: 10,   dur: 1,   title: "สัมภาษณ์ครูใหม่",      who: "ฝ่ายบุคคล",                status: "confirmed" },
+  { day: 3, room: "av",      h: 8,    dur: 8,   title: "วันสุนทรภู่",          who: "กลุ่มสาระภาษาไทย",         status: "pinned" },
+  { day: 3, room: "8103",    h: 14,   dur: 2,   title: "สอบ Pre O-NET",         who: "งานวัดผล",                 status: "confirmed" },
+  { day: 4, room: "meeting", h: 9,    dur: 1.5, title: "ประชุมผู้ปกครอง",      who: "ม.4-6",                    status: "confirmed" },
+  { day: 4, room: "av",      h: 13.5, dur: 2.5, title: "บรรยายแนะแนว",        who: "ม.6 · จุฬาฯ",              status: "confirmed" },
+  { day: 4, room: "8103",    h: 11,   dur: 1.5, title: "ค่ายภาษา",              who: "ภาษาอังกฤษ",               status: "pending" },
+  { day: 5, room: "av",      h: 9,    dur: 4,   title: "การแสดงดนตรีไทย",      who: "ชุมนุมดนตรี",              status: "confirmed" },
+  { day: 5, room: "meeting", h: 14,   dur: 1.5, title: "นัดผู้ปกครอง",         who: "อ.ฐิติมา",                 status: "confirmed" },
+];
+
+const INVENTORY = [
+  { id: "AV-CAM-001",  name: "กล้อง Sony A7 III",            cat: "กล้อง",     stock: 4, total: 4, status: "available", price: 75000, ico: "cam" },
+  { id: "AV-CAM-002",  name: "กล้อง Canon EOS R6",           cat: "กล้อง",     stock: 1, total: 2, status: "low",       price: 85000, ico: "cam" },
+  { id: "AV-LENS-001", name: "เลนส์ Sony 24-70mm GM",         cat: "กล้อง",     stock: 2, total: 3, status: "available", price: 65000, ico: "cam" },
+  { id: "AV-MIC-001",  name: "ไมโครโฟนไร้สาย Shure BLX",      cat: "ไมโครโฟน", stock: 6, total: 8, status: "available", price: 18000, ico: "mic" },
+  { id: "AV-MIC-002",  name: "ไมค์หนีบเสื้อ Rode Wireless GO", cat: "ไมโครโฟน", stock: 0, total: 4, status: "out",       price: 12000, ico: "mic" },
+  { id: "AV-MIC-003",  name: "ขาตั้งไมค์",                   cat: "ไมโครโฟน", stock: 8, total: 8, status: "available", price: 1200,  ico: "mic" },
+  { id: "AV-PROJ-001", name: "โปรเจกเตอร์ Epson 4500 lumens", cat: "ภาพ",       stock: 2, total: 3, status: "available", price: 45000, ico: "proj" },
+  { id: "AV-SCRN-001", name: "จอรับภาพ 120 นิ้ว",             cat: "ภาพ",       stock: 1, total: 2, status: "borrowed",  price: 8000,  ico: "proj" },
+  { id: "AV-LGHT-001", name: "ไฟสตูดิโอ LED Aputure 300d",    cat: "แสง",      stock: 3, total: 4, status: "available", price: 35000, ico: "light" },
+  { id: "AV-LGHT-002", name: "ไฟพาร์ LED RGB",                cat: "แสง",      stock: 8, total: 12, status: "available", price: 4500, ico: "light" },
+  { id: "AV-SPK-001",  name: "ลำโพง JBL EON710",              cat: "เสียง",     stock: 2, total: 4, status: "borrowed",  price: 18000, ico: "speaker" },
+  { id: "AV-SPK-002",  name: "มิกเซอร์ Yamaha MG12XU",        cat: "เสียง",     stock: 1, total: 1, status: "available", price: 18500, ico: "speaker" },
+  { id: "AV-CBL-001",  name: "สาย XLR 10 เมตร",                cat: "อุปกรณ์",   stock: 12, total: 20, status: "available", price: 450, ico: "cable" },
+  { id: "AV-CBL-002",  name: "สาย HDMI 4K 5 เมตร",             cat: "อุปกรณ์",   stock: 5, total: 8, status: "low",       price: 350,  ico: "cable" },
+  { id: "AV-TRP-001",  name: "ขาตั้งกล้อง Manfrotto",         cat: "อุปกรณ์",   stock: 3, total: 4, status: "available", price: 9500,  ico: "cam" },
+  { id: "AV-FILM-001", name: "การ์ดความจำ SD 128GB",          cat: "อุปกรณ์",   stock: 6, total: 10, status: "low",      price: 1200,  ico: "film" },
+];
+
+const TRANSACTIONS = [
+  { ts: "26 พ.ค. 14:32", type: "out",    item: "AV-CAM-001", by: "ด.ญ. นภัสสร (S401)", note: "ถ่ายภาพพิธีเปิดวันสุนทรภู่", due: "27 พ.ค." },
+  { ts: "26 พ.ค. 11:08", type: "in",     item: "AV-MIC-001", by: "อ.ชาญวิทย์ (T07)",    note: "คืน 4 ตัว จากงานประชุม", due: "-" },
+  { ts: "26 พ.ค. 09:45", type: "in",     item: "AV-SPK-001", by: "ด.ญ. ภัทรา (S405)",   note: "คืนหลังซ้อม", due: "-" },
+  { ts: "25 พ.ค. 16:20", type: "stock",  item: "AV-LENS-001",by: "อ.พิมพ์ชนก (T06)",     note: "เพิ่มจากสั่งซื้อ", due: "-" },
+  { ts: "25 พ.ค. 13:50", type: "out",    item: "AV-PROJ-001",by: "อ.วราภรณ์ (T04)",      note: "ห้องประชุม", due: "26 พ.ค." },
+  { ts: "25 พ.ค. 10:15", type: "out",    item: "AV-MIC-002", by: "ด.ญ. ปุณยนุช (S418)",  note: "ไลฟ์สตรีมประชุม", due: "26 พ.ค." },
+];
+
+const ANNOUNCES = [
+  { pin: true, title: "เตรียมงานวันสุนทรภู่ 26 มิ.ย.", when: "ประกาศ 24 พ.ค. · โดย อ.สมพร", body: "ขอให้นักเรียนชมรมโสตทัศนศึกษาทุกคน เข้าประชุมเตรียมงานในวันที่ 30 พ.ค. เวลา 15.30 น. ณ ห้องโสตฯ — แบ่งทีมเสียง แสง กล้อง ไลฟ์ และเอกสาร" },
+  { pin: false, title: "ระเบียบการยืม-คืนพัสดุใหม่ (มีผล 1 มิ.ย.)", when: "ประกาศ 22 พ.ค. · โดย อ.พิมพ์ชนก", body: "ขอความร่วมมือสมาชิกชมรมและคุณครูใช้ระบบ QR-Code ในการยืม-คืนพัสดุทุกครั้ง เพื่อความถูกต้องของระบบสต็อก" },
+  { pin: false, title: "อบรมการใช้กล้อง Sony A7 III", when: "ประกาศ 20 พ.ค. · โดย อ.ศุภลักษณ์", body: "เปิดรับสมัครนักเรียนชมรม รอบที่ 2 อบรมการใช้งานกล้อง Sony A7 III และพื้นฐานการจัดองค์ประกอบภาพ วันเสาร์ที่ 14 มิ.ย. 9.00-12.00 น." },
+  { pin: false, title: "ตรวจสอบครุภัณฑ์ประจำเดือนพฤษภาคม", when: "ประกาศ 18 พ.ค. · โดย อ.พิมพ์ชนก", body: "ขอให้ผู้รับผิดชอบครุภัณฑ์แต่ละหมวดส่งรายการตรวจสอบสภาพประจำเดือนภายในวันที่ 31 พ.ค." },
+];
+
+const NOTIFS = [
+  { unread: true,  ico: "bell",  what: "ด.ญ. นภัสสร ขอยืม กล้อง Sony A7 III รออนุมัติ", when: "5 นาทีที่แล้ว" },
+  { unread: true,  ico: "cal",   what: "ห้องโสตฯ มีการจองทับเวลา 14:00 พุธ 28 พ.ค.", when: "32 นาทีที่แล้ว" },
+  { unread: true,  ico: "box",   what: "สต็อก สาย HDMI 4K ต่ำกว่าเกณฑ์ (5/8)", when: "1 ชั่วโมงที่แล้ว" },
+  { unread: false, ico: "check", what: "อ.วราภรณ์ คืน โปรเจกเตอร์ Epson เรียบร้อย", when: "เมื่อวาน 09:18" },
+  { unread: false, ico: "info",  what: "ประกาศใหม่: ระเบียบการยืม-คืนพัสดุ", when: "2 วันที่แล้ว" },
+];
+
+const TIMELINE = [
+  { date: "30 พ.ค.",  what: "ประชุมเตรียมงาน วันสุนทรภู่",   desc: "รวมพล ชมรมโสตฯ · ห้องโสตฯ 15:30 น.", state: "gold" },
+  { date: "5 มิ.ย.",  what: "ติดตั้งอุปกรณ์ฉาก & ไฟเวที",   desc: "ทีมเทคนิค (T07 + S407-410) · เริ่ม 13.00 น.", state: "" },
+  { date: "10 มิ.ย.", what: "ซ้อมใหญ่",                    desc: "พร้อมไลฟ์ทดสอบ", state: "" },
+  { date: "14 มิ.ย.", what: "อบรมกล้อง Sony A7 III รุ่น 2", desc: "ห้องโสตฯ 9.00-12.00", state: "" },
+  { date: "26 มิ.ย.", what: "วันสุนทรภู่ (Main Event)",     desc: "พิธีเปิด 8.30 · แสดง 9.30 · ไลฟ์สตรีมตลอดงาน", state: "gold" },
+  { date: "30 มิ.ย.", what: "สรุปงานและตรวจครุภัณฑ์",      desc: "ส่งรายงานพัสดุประจำเดือน", state: "" },
+];
+
+const GALLERY = [
+  { h: 220, label: "พิธีไหว้ครู 2568",        date: "13 มิ.ย. 2568", hue: 30 },
+  { h: 280, label: "งานกีฬาสี",              date: "5 ก.พ. 2568",   hue: 210 },
+  { h: 180, label: "ค่ายอาเซียน",            date: "20 ม.ค. 2568",  hue: 150 },
+  { h: 320, label: "ปัจฉิมนิเทศ ม.6",         date: "28 ก.พ. 2568",  hue: 280 },
+  { h: 200, label: "วันสุนทรภู่ 2567",        date: "26 มิ.ย. 2567", hue: 40 },
+  { h: 260, label: "การประกวดวงดนตรี",        date: "14 ก.ค. 2567",  hue: 350 },
+  { h: 200, label: "วันเฉลิมพระชนมพรรษา",     date: "12 ส.ค. 2567",  hue: 50 },
+  { h: 240, label: "ค่ายดาราศาสตร์",          date: "15 พ.ย. 2567",  hue: 240 },
+  { h: 280, label: "การประชุมผู้ปกครอง",      date: "10 ก.ย. 2567",  hue: 200 },
+];
+
+Object.assign(window, {
+  TEACHERS, STUDENTS, ROOMS, BOOKINGS, INVENTORY,
+  TRANSACTIONS, ANNOUNCES, NOTIFS, TIMELINE, GALLERY,
+});
