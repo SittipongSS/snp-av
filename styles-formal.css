@@ -1955,5 +1955,30 @@ table.tbl tbody tr:last-child td { border-bottom: none; }
     grid-template-columns: 1fr;
     gap: 16px;
   }
+  .bts-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px;
+  }
+}
+@media (max-width: 600px) {
+  .bts-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Behind the scenes cards */
+.bts-card {
+  transition: transform 200ms, box-shadow 200ms, border-color 200ms;
+}
+.bts-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  border-color: var(--gold-300);
+}
+.bts-img-container .bts-icon {
+  transition: transform 300ms ease;
+}
+.bts-card:hover .bts-img-container .bts-icon {
+  transform: scale(1.1) rotate(4deg);
 }
 

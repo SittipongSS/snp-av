@@ -201,7 +201,51 @@ function PublicHome({ onNav, auth = {role:'public'} }) {
         </div>
       </div>
 
-      {/* ── 3. ข่าวประชาสัมพันธ์ ── */}
+      {/* ── 3. ภาพเบื้องหลังการทำงาน ── */}
+      <div className="land-section" style={{background:'var(--surface)', borderTop:'1px solid var(--border)', borderBottom:'1px solid var(--border)'}}>
+        <div className="land-inner">
+          <div className="section-head section-head-row">
+            <div>
+              <div className="section-title">เบื้องหลัง<span className="accent">การทำงาน</span></div>
+              <div className="section-sub">ภาพการปฏิบัติงานเบื้องหลังความสำเร็จของกิจกรรมต่างๆ ในโรงเรียนสายน้ำผึ้ง</div>
+            </div>
+            <button className="btn-pill gold" onClick={() => onNav('gallery')} style={{border:'none', display:'inline-flex', alignItems:'center', gap:6, cursor:'pointer'}}>
+              ดูแกลเลอรีทั้งหมด <I.chevR size={14}/>
+            </button>
+          </div>
+          <div className="bts-grid" style={{display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:20, marginTop:24}}>
+            {[
+              { title: "ควบคุมระบบเสียงและมิกเซอร์", desc: "งานประชุมผู้ปกครอง", hue: 210, icon: "speaker" },
+              { title: "บันทึกภาพนิ่งและวิดีโอกิจกรรม", desc: "พิธีไหว้ครู ปีการศึกษา 2568", hue: 30, icon: "cam" },
+              { title: "จัดเตรียมระบบไฟและบอร์ดแสงสี", desc: "ซ้อมการแสดงดนตรีสากล", hue: 280, icon: "light" },
+              { title: "ควบคุมระบบการถ่ายทอดสด", desc: "เตรียมงานวันสุนทรภู่ 2568", hue: 150, icon: "film" }
+            ].map((pic, i) => {
+              const Ico = I[pic.icon] || I.gallery;
+              return (
+                <div key={i} className="bts-card" style={{borderRadius:'var(--r-lg)', overflow:'hidden', background:'var(--bg-sunken)', border:'1px solid var(--border)', display:'flex', flexDirection:'column', cursor:'pointer'}} onClick={() => onNav('gallery')}>
+                  <div className="bts-img-container" style={{
+                    height:160,
+                    background: `linear-gradient(135deg, oklch(0.72 0.08 ${pic.hue}), oklch(0.55 0.10 ${pic.hue + 30}))`,
+                    position:'relative',
+                    overflow:'hidden',
+                    display:'grid',
+                    placeItems:'center'
+                  }}>
+                    <div className="stripes" style={{position:'absolute', inset:0, backgroundImage:'repeating-linear-gradient(135deg, transparent 0 12px, rgba(255,255,255,0.03) 12px 13px)'}}/>
+                    <div className="bts-icon" style={{color:'rgba(255,255,255,0.7)'}}><Ico size={40}/></div>
+                  </div>
+                  <div className="bts-body" style={{padding:16}}>
+                    <div className="bts-title" style={{fontSize:13.5, fontWeight:700, color:'var(--navy-800)', lineHeight:1.4}}>{pic.title}</div>
+                    <div className="bts-desc" style={{fontSize:11.5, color:'var(--text-subtle)', marginTop:4}}>{pic.desc}</div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* ── 4. ข่าวประชาสัมพันธ์ ── */}
       <div className="land-section" style={{background:'var(--surface)', borderTop:'1px solid var(--border)', borderBottom:'1px solid var(--border)'}}>
         <div className="land-inner">
           <div className="section-head section-head-row">
