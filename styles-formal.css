@@ -1757,5 +1757,203 @@ table.tbl tbody tr:last-child td { border-bottom: none; }
   .person-grid { grid-template-columns: 1fr 1fr; }
   .gallery { columns: 1; }
   .hero-title { font-size: 22px; }
-  .btn-pill { padding: 10px 20px; font-size: 13px; }
 }
+
+/* ============ New styles for PublicHome restructure & RoomDetail ============ */
+
+/* PR News Section */
+.pr-news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 24px;
+}
+.pr-news-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  display: flex;
+  gap: 16px;
+  transition: transform 150ms, box-shadow 150ms, border-color 150ms;
+}
+.pr-news-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: var(--gold-300);
+}
+.pr-news-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 99px;
+  background: var(--bg-sunken);
+  display: grid;
+  place-items: center;
+}
+.pr-news-body {
+  flex: 1;
+}
+.pr-news-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: space-between;
+}
+.pr-news-title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy-800);
+  line-height: 1.4;
+}
+
+/* Social Links Section */
+.social-links-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 24px;
+}
+.social-link-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 24px;
+  text-decoration: none;
+  color: var(--text);
+  transition: transform 200ms, box-shadow 200ms, border-color 200ms;
+  position: relative;
+  overflow: hidden;
+}
+.social-link-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--navy-500);
+}
+.social-link-card.fb::before {
+  background: #1877f2;
+}
+.social-link-card.fb-av::before {
+  background: var(--gold-400);
+}
+.social-link-card.yt::before {
+  background: #ff0000;
+}
+.social-link-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  border-color: rgba(0,0,0,0.15);
+}
+.social-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 99px;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  font-weight: 800;
+  color: #fff;
+  background: #1877f2;
+  margin-bottom: 16px;
+}
+.social-link-card.fb-av .social-icon {
+  background: var(--gold-400);
+}
+.social-link-card.yt .social-icon {
+  background: #ff0000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.social-info {
+  flex: 1;
+}
+.social-name {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy-800);
+}
+.social-handle {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--text-subtle);
+  margin-top: 2px;
+}
+.social-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-top: 10px;
+}
+.social-action {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy-600);
+}
+.social-link-card.yt .social-action {
+  color: #cc0000;
+}
+
+/* Room Card Interactive Badge */
+.room-card {
+  transition: transform 200ms, box-shadow 200ms;
+}
+.room-card.interactive:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 36px rgba(0,0,0,0.18);
+}
+.room-card-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 99px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: opacity 200ms, transform 200ms;
+}
+.room-card:hover .room-card-badge {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Room Detail Page */
+.room-detail-page {
+  animation: fadeIn 300ms ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 960px) {
+  .pr-news-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .social-links-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+

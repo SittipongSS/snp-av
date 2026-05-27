@@ -216,6 +216,7 @@ function App() {
         {page === 'system'    && <SystemPage auth={auth} setAuth={setAuth}/>}
         {page === 'personnel' && <Personnel auth={auth}/>}
         {page === 'gallery'   && <Gallery auth={auth}/>}
+        {page.startsWith('room-') && <RoomDetail roomId={page.replace('room-', '')} onNav={navigate} auth={auth}/>}
       </main>
 
       {/* Footer */}

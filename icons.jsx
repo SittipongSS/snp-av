@@ -46,6 +46,8 @@ const I = {
   phone:   (p) => <Icon {...p} d={<><path d="M5 4h4l2 5-3 2a12 12 0 005 5l2-3 5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></>} />,
   crown:   (p) => <Icon {...p} d={<><path d="M3 7l4 3 5-6 5 6 4-3v11H3z"/></>} />,
   flag:    (p) => <Icon {...p} d={<><path d="M5 3v18M5 4h12l-2 4 2 4H5"/></>} />,
+  youtube: (p) => <Icon {...p} d={<><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17z"/><polygon points="10 15 15 12 10 9" fill="currentColor"/></>} />,
+  play:    (p) => <Icon {...p} d={<><polygon points="6 3 20 12 6 21 6 3" fill="currentColor"/></>} />,
 };
 
 window.I = I;
