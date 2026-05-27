@@ -2028,3 +2028,25 @@ table.tbl tbody tr:last-child td { border-bottom: none; }
   filter: brightness(1.05);
 }
 
+/* Weekly shifts grid */
+.duty-weekly-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 1024px) {
+  .duty-weekly-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .duty-weekly-grid {
+    grid-template-columns: 1fr;
+  }
+  .duty-staff-list {
+    min-width: 100% !important;
+  }
+}
+

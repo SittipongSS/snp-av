@@ -48,6 +48,8 @@ const I = {
   flag:    (p) => <Icon {...p} d={<><path d="M5 3v18M5 4h12l-2 4 2 4H5"/></>} />,
   youtube: (p) => <Icon {...p} d={<><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17z"/><polygon points="10 15 15 12 10 9" fill="currentColor"/></>} />,
   play:    (p) => <Icon {...p} d={<><polygon points="6 3 20 12 6 21 6 3" fill="currentColor"/></>} />,
+  mapPin:  (p) => <Icon {...p} d={<><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></>} />,
+  user:    (p) => <Icon {...p} d={<><path d="M19 21v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></>} />,
 };
 
 window.I = I;

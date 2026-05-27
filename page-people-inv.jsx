@@ -39,12 +39,15 @@ function Personnel({ auth = {role:'public'} }) {
         <button className={"tab" + (tab === 'students' ? ' active' : '')} onClick={() => setTab('students')}>
           นักเรียนชมรม <span style={{color: 'var(--text-subtle)', marginLeft: 4}}>{STUDENTS.length}</span>
         </button>
+        <button className={"tab" + (tab === 'duty' ? ' active' : '')} onClick={() => setTab('duty')}>
+          ตารางเวรถ่ายรูป
+        </button>
         <button className={"tab" + (tab === 'org' ? ' active' : '')} onClick={() => setTab('org')}>
           ผังโครงสร้าง
         </button>
         <div className="search" style={{marginLeft: 'auto', marginBottom: 4}}>
           <I.search size={14}/>
-          <input placeholder="ค้นหาชื่อ ตำแหน่ง ฝ่าย…" value={search} onChange={e => setSearch(e.target.value)}/>
+          <input placeholder={tab === 'duty' ? "ค้นหาชื่องาน ครู นักเรียนเวร..." : "ค้นหาชื่อ ตำแหน่ง ฝ่าย…"} value={search} onChange={e => setSearch(e.target.value)}/>
         </div>
       </div>
 
@@ -119,6 +122,184 @@ function Personnel({ auth = {role:'public'} }) {
       )}
 
       {tab === 'org' && <OrgChart/>}
+
+      {tab === 'duty' && (
+        <div className="col" style={{gap: 24}}>
+          {/* ส่วนที่ 1: ตารางเวรประจำวัน (วันจันทร์ - วันศุกร์) */}
+          <div>
+            <div className="row" style={{gap: 10, marginBottom: 16, alignItems: 'center'}}>
+              <h3 style={{fontSize: 16, fontWeight: 700, color: 'var(--navy-800)', margin: 0}}>
+                ตารางเวรปฏิบัติหน้าที่ประจำวัน (ภาพนิ่ง / เทคนิค)
+              </h3>
+              <div style={{flex: 1, height: 1, background: 'var(--border)', marginLeft: 8}}/>
+            </div>
+            
+            <div className="duty-weekly-grid">
+              {WEEKLY_SHIFTS.map((w, idx) => (
+                <div key={idx} className="card outline" style={{
+                  padding: 14,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 8,
+                  background: 'var(--surface)',
+                  border: '1px solid var(--border)',
+                  borderRadius: 'var(--r-lg)',
+                  position: 'relative'
+                }}>
+                  <div style={{
+                    fontSize: 14,
+                    fontWeight: 700,
+                    color: 'var(--navy-700)',
+                    fontFamily: 'var(--font-display)',
+                    borderBottom: '1px solid var(--border)',
+                    paddingBottom: 6
+                  }}>
+                    {w.day}
+                  </div>
+                  
+                  <div style={{fontSize: 12}}>
+                    <div style={{color: 'var(--text-subtle)', fontWeight: 600, fontSize: 11}}>อาจารย์ผู้ดูแลเวร</div>
+                    <div style={{fontWeight: 500, color: 'var(--text-normal)', marginTop: 2}}>{w.teacher}</div>
+                  </div>
+                  
+                  <div style={{fontSize: 12}}>
+                    <div style={{color: 'var(--text-subtle)', fontWeight: 600, fontSize: 11}}>นักเรียนเวรชมรม</div>
+                    <div style={{display: 'flex', flexDirection: 'column', gap: 2, marginTop: 4}}>
+                      {w.students.map((st, i) => (
+                        <div key={i} className="row" style={{gap: 4, alignItems: 'center'}}>
+                          <span className="dot" style={{background: 'var(--gold-400)', width: 6, height: 6, borderRadius: 99}}/>
+                          <span style={{fontWeight: 500}}>{st}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div style={{
+                    fontSize: 11,
+                    color: 'var(--text-muted)',
+                    marginTop: 'auto',
+                    paddingTop: 8,
+                    borderTop: '1px dotted var(--border)',
+                    lineHeight: 1.4
+                  }}>
+                    {w.note}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ส่วนที่ 2: งานมอบหมายเวรถ่ายภาพกิจกรรม */}
+          <div>
+            <div className="row" style={{gap: 10, marginBottom: 16, alignItems: 'center'}}>
+              <h3 style={{fontSize: 16, fontWeight: 700, color: 'var(--navy-800)', margin: 0}}>
+                คิวงานเวรถ่ายรูป / จัดเวทีสตรีมมิ่งกิจกรรมโรงเรียน
+              </h3>
+              <div style={{flex: 1, height: 1, background: 'var(--border)', marginLeft: 8}}/>
+              {!isPublic && (
+                <button className="btn primary sm" style={{fontSize: 12, padding: '4px 10px'}} onClick={() => alert('ฟังก์ชันการมอบหมายงานอยู่ในช่วงทดสอบระบบ')}>
+                  <I.plus size={12}/> มอบหมายงานใหม่
+                </button>
+              )}
+            </div>
+
+            <div className="col" style={{gap: 12}}>
+              {DUTY_SCHEDULE.filter(d => 
+                !search || 
+                d.event.toLowerCase().includes(search.toLowerCase()) || 
+                d.teacher.toLowerCase().includes(search.toLowerCase()) || 
+                d.loc.toLowerCase().includes(search.toLowerCase()) || 
+                d.staff.some(s => s.name.toLowerCase().includes(search.toLowerCase()))
+              ).map((d) => (
+                <div key={d.id} className="card outline" style={{
+                  padding: 16,
+                  background: d.status === 'completed' ? 'var(--bg-sunken)' : 'var(--surface)',
+                  border: d.status === 'completed' ? '1px solid var(--border)' : '1px solid var(--navy-100)',
+                  borderRadius: 'var(--r-lg)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 20,
+                  opacity: d.status === 'completed' ? 0.8 : 1,
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}>
+                  {/* Left Indicator bar */}
+                  <div style={{
+                    position: 'absolute',
+                    top: 0, left: 0, bottom: 0,
+                    width: 4,
+                    background: d.status === 'completed' ? 'var(--text-subtle)' : 'var(--gold-400)'
+                  }}/>
+
+                  {/* Date & Badge block */}
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    minWidth: 90,
+                    textAlign: 'center',
+                    paddingRight: 16,
+                    borderRight: '1px solid var(--border)'
+                  }}>
+                    <div style={{fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 700, color: 'var(--navy-800)'}}>
+                      {d.date.split(' ')[0]} {d.date.split(' ')[1]}
+                    </div>
+                    <div style={{fontSize: 11, color: 'var(--text-subtle)', marginTop: 2}}>
+                      {d.date.split(' ')[2]}
+                    </div>
+                    <span className={"badge " + (d.status === 'completed' ? '' : 'gold')} style={{fontSize: 10, padding: '2px 8px', marginTop: 8}}>
+                      {d.status === 'completed' ? 'เสร็จสิ้น' : 'กำลังจะมาถึง'}
+                    </span>
+                  </div>
+
+                  {/* Details Block */}
+                  <div style={{flex: 1, minWidth: 0}}>
+                    <div style={{fontSize: 15, fontWeight: 700, color: 'var(--navy-800)', fontFamily: 'var(--font-display)'}}>
+                      {d.event}
+                    </div>
+                    
+                    <div className="row" style={{gap: 16, marginTop: 6, flexWrap: 'wrap', fontSize: 12.5, color: 'var(--text-muted)'}}>
+                      <span className="row" style={{gap: 4, alignItems: 'center'}}>
+                        <I.clock size={13}/> {d.time}
+                      </span>
+                      <span className="row" style={{gap: 4, alignItems: 'center'}}>
+                        <I.mapPin size={13}/> {d.loc}
+                      </span>
+                      <span className="row" style={{gap: 4, alignItems: 'center'}}>
+                        <I.user size={13}/> ผู้ดูแลเวร: <span style={{fontWeight: 600}}>{d.teacher}</span>
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Staff block */}
+                  <div className="duty-staff-list" style={{
+                    minWidth: 260,
+                    background: 'var(--bg-sunken)',
+                    borderRadius: 'var(--r)',
+                    padding: '8px 12px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 4,
+                    border: '1px solid var(--border)'
+                  }}>
+                    <div style={{fontSize: 10.5, color: 'var(--text-subtle)', fontWeight: 600, borderBottom: '1px solid var(--border)', paddingBottom: 2, marginBottom: 2}}>
+                      นักเรียนที่ได้รับการมอบหมาย
+                    </div>
+                    {d.staff.map((st, i) => (
+                      <div key={i} className="row" style={{justifyContent: 'space-between', fontSize: 11.5, gap: 10}}>
+                        <span style={{color: 'var(--text-muted)'}}>{st.role}</span>
+                        <span style={{fontWeight: 600, color: 'var(--navy-700)'}}>{st.name}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
