@@ -12,7 +12,6 @@ const NAV_PUBLIC = [
   { id: 'dashboard', th: 'หน้าหลัก',  ico: 'home',    count: null },
   { id: 'info',      th: 'ข่าวสาร',   ico: 'info',    count: 4 },
   { id: 'personnel', th: 'บุคลากร',   ico: 'users',   count: null },
-  { id: 'gallery',   th: 'แกลเลอรี',  ico: 'gallery', count: null },
 ];
 const NAV_SYSTEM = { id: 'system', th: 'ระบบโสตฯ', ico: 'setting', count: null };
 
