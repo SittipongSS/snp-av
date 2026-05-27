@@ -201,7 +201,7 @@ function PublicHome({ onNav, auth = {role:'public'} }) {
         </div>
       </div>
 
-      {/* ── 3. ภาพเบื้องหลังการทำงาน ── */}
+      {/* ── 3. ภาพเบื้องหลังการทำงาน (แนวแกลลอรี) ── */}
       <div className="land-section" style={{background:'var(--surface)', borderTop:'1px solid var(--border)', borderBottom:'1px solid var(--border)'}}>
         <div className="land-inner">
           <div className="section-head section-head-row">
@@ -213,34 +213,46 @@ function PublicHome({ onNav, auth = {role:'public'} }) {
               ดูแกลเลอรีทั้งหมด <I.chevR size={14}/>
             </button>
           </div>
-          <div className="bts-grid" style={{display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:20, marginTop:24}}>
+          <div className="gallery" style={{marginTop:24}}>
             {[
-              { title: "ควบคุมระบบเสียงและมิกเซอร์", desc: "งานประชุมผู้ปกครอง", hue: 210, icon: "speaker" },
-              { title: "บันทึกภาพนิ่งและวิดีโอกิจกรรม", desc: "พิธีไหว้ครู ปีการศึกษา 2568", hue: 30, icon: "cam" },
-              { title: "จัดเตรียมระบบไฟและบอร์ดแสงสี", desc: "ซ้อมการแสดงดนตรีสากล", hue: 280, icon: "light" },
-              { title: "ควบคุมระบบการถ่ายทอดสด", desc: "เตรียมงานวันสุนทรภู่ 2568", hue: 150, icon: "film" }
-            ].map((pic, i) => {
-              const Ico = I[pic.icon] || I.gallery;
-              return (
-                <div key={i} className="bts-card" style={{borderRadius:'var(--r-lg)', overflow:'hidden', background:'var(--bg-sunken)', border:'1px solid var(--border)', display:'flex', flexDirection:'column', cursor:'pointer'}} onClick={() => onNav('gallery')}>
-                  <div className="bts-img-container" style={{
-                    height:160,
-                    background: `linear-gradient(135deg, oklch(0.72 0.08 ${pic.hue}), oklch(0.55 0.10 ${pic.hue + 30}))`,
-                    position:'relative',
-                    overflow:'hidden',
-                    display:'grid',
-                    placeItems:'center'
+              { label: "จัดเตรียมตำแหน่งมุมกล้อง & ขาตั้ง", date: "งานพิธีไหว้ครู 2568", hue: 30, h: 200 },
+              { label: "เซ็ตอัพมิกเซอร์และระบบเสียงห้องประชุม", date: "ประชุมผู้ปกครองภาคเรียนที่ 1", hue: 210, h: 240 },
+              { label: "มอนิเตอร์สัญญาณและภาพการถ่ายทอดสด", date: "งานวันสุนทรภู่ประจำปี", hue: 150, h: 180 },
+              { label: "ติดตั้งระบบไฟเวที LED และบอร์ดควบคุม", date: "การประกวดดนตรีสายน้ำผึ้ง", hue: 280, h: 260 },
+              { label: "ถ่ายภาพนิ่งบรรยากาศขอบสนาม", date: "งานกรีฑาสีและกีฬาสีภายใน", hue: 40, h: 210 },
+              { label: "ตรวจเช็คสายสัญญาณและไมค์ประชุม", date: "การสัมมนาครูและกลุ่มวิชาการ", hue: 350, h: 230 }
+            ].map((g, i) => (
+              <div key={i} className="pic interactive-pic" onClick={() => onNav('gallery')} style={{cursor: 'pointer'}}>
+                <div style={{
+                  height: g.h,
+                  background: `linear-gradient(135deg, oklch(0.72 0.08 ${g.hue}), oklch(0.55 0.10 ${g.hue + 30}))`,
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}>
+                  <div className="stripes"/>
+                  <div style={{
+                    position: 'absolute', top: 12, right: 12,
+                    fontFamily: 'var(--font-mono)', fontSize: 9.5,
+                    color: '#fff', opacity: 0.7,
+                    background: 'rgba(15,31,58,0.4)',
+                    padding: '2px 6px', borderRadius: 4,
+                    backdropFilter: 'blur(4px)',
+                  }}>AV_BTS_{(i+1).toString().padStart(3,'0')}.jpg</div>
+                  <div className="label" style={{
+                    position: 'absolute', bottom: 0, left: 0, right: 0,
+                    padding: '30px 12px 12px',
+                    background: 'linear-gradient(to top, rgba(8,29,62,0.85), transparent)',
+                    color: '#fff',
+                    fontSize: '13px',
+                    fontFamily: 'var(--font-display)',
+                    fontWeight: 600
                   }}>
-                    <div className="stripes" style={{position:'absolute', inset:0, backgroundImage:'repeating-linear-gradient(135deg, transparent 0 12px, rgba(255,255,255,0.03) 12px 13px)'}}/>
-                    <div className="bts-icon" style={{color:'rgba(255,255,255,0.7)'}}><Ico size={40}/></div>
-                  </div>
-                  <div className="bts-body" style={{padding:16}}>
-                    <div className="bts-title" style={{fontSize:13.5, fontWeight:700, color:'var(--navy-800)', lineHeight:1.4}}>{pic.title}</div>
-                    <div className="bts-desc" style={{fontSize:11.5, color:'var(--text-subtle)', marginTop:4}}>{pic.desc}</div>
+                    <div style={{fontWeight: 700, fontSize: 13.5}}>{g.label}</div>
+                    <div className="date" style={{fontSize: 11, color: 'var(--gold-300)', marginTop: 4, fontWeight: 500}}>{g.date}</div>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </div>
       </div>
