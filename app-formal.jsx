@@ -38,9 +38,6 @@ function App() {
     role: 'public', name: '', email: '', phone: ''
   });
 
-  fUseEffect(() => {
-    if (auth.role === 'public' && page === 'system') setPage('dashboard');
-  }, [auth.role]);
 
   fUseEffect(() => {
     document.documentElement.dataset.theme   = t.theme;
@@ -69,7 +66,7 @@ function App() {
   const isLoggedIn = auth.role !== 'public';
   const isAdmin    = auth.role === 'admin';
   const navItems   = [...NAV_PUBLIC, NAV_SYSTEM];
-  const curr       = navItems.find(n => n.id === page) || NAV_PUBLIC[0];
+  const curr       = navItems.find(n => n.id === page || (n.id === 'system' && page === 'system-login')) || NAV_PUBLIC[0];
 
   return (
     <div className="app-shell" data-screen-label={curr?.th}>
@@ -98,7 +95,7 @@ function App() {
               const Ico = I[n.ico];
               return (
                 <button key={n.id}
-                  className={"topnav-item" + (page === n.id ? ' active' : '')}
+                  className={"topnav-item" + (page === n.id || (n.id === 'system' && page === 'system-login') ? ' active' : '')}
                   onClick={() => navigate(n.id)}
                 >
                   <Ico size={15}/>
@@ -133,7 +130,7 @@ function App() {
                 <span className="user-pill-name">{auth.name}</span>
               </div>
             ) : (
-              <button className="btn sm topnav-login" onClick={() => setPage('system')}>
+              <button className="btn sm topnav-login" onClick={() => navigate('system-login')}>
                 <I.bolt size={13}/> <span className="login-text">เข้าสู่ระบบ</span>
               </button>
             )}
@@ -150,7 +147,7 @@ function App() {
             const Ico = I[n.ico];
             return (
               <button key={n.id}
-                className={"drawer-item" + (page === n.id ? ' active' : '')}
+                className={"drawer-item" + (page === n.id || (n.id === 'system' && page === 'system-login') ? ' active' : '')}
                 onClick={() => navigate(n.id)}
               >
                 <Ico size={18}/>
@@ -182,7 +179,7 @@ function App() {
             </button>
           </div>
         ) : (
-          <button className="drawer-item" onClick={() => navigate('system')}>
+          <button className="drawer-item" onClick={() => navigate('system-login')}>
             <I.bolt size={18}/>
             <span>เข้าสู่ระบบ</span>
           </button>
@@ -194,7 +191,7 @@ function App() {
         <div className="access-banner public">
           <I.info size={14}/>
           <span>คุณกำลังดูในฐานะ <b>สาธารณะ (Public)</b></span>
-          <button className="btn sm" onClick={() => setPage('system')} style={{
+          <button className="btn sm" onClick={() => navigate('system-login')} style={{
             marginLeft:'auto', background:'var(--gold-400)', borderColor:'var(--gold-500)',
             color:'var(--navy-900)', fontWeight:600,
           }}>
@@ -213,7 +210,7 @@ function App() {
       <main>
         {page === 'dashboard' && <Dashboard onNav={setPage} auth={auth}/>}
         {page === 'info'      && <Information auth={auth}/>}
-        {page === 'system'    && <SystemPage auth={auth} setAuth={setAuth}/>}
+        {(page === 'system' || page === 'system-login') && <SystemPage auth={auth} setAuth={setAuth} initialLogin={page === 'system-login'}/>}
         {page === 'personnel' && <Personnel auth={auth}/>}
         {page === 'gallery'   && <Gallery auth={auth}/>}
         {page.startsWith('room-') && <RoomDetail roomId={page.replace('room-', '')} onNav={navigate} auth={auth}/>}

@@ -185,7 +185,7 @@ function OrgChart() {
 }
 
 /* ============ INVENTORY ============ */
-function Inventory({ embedded = false, canApprove = false }) {
+function Inventory({ embedded = false, canApprove = false, auth = {role:'public'}, onGoLogin }) {
   const [cat, setCat] = pUseState('all');
   const [status, setStatus] = pUseState('all');
   const [search, setSearch] = pUseState('');
@@ -218,8 +218,16 @@ function Inventory({ embedded = false, canApprove = false }) {
         </div>
         <div className="actions">
           <button className="btn ghost" onClick={() => setShowQR(true)}><I.qr size={14}/> สแกน QR</button>
-          <button className="btn ghost"><I.in size={14}/> รับเข้าสต็อก</button>
-          <button className="btn primary"><I.out size={14}/> ใบยืม-เบิก</button>
+          {auth.role !== 'public' ? (
+            <>
+              <button className="btn ghost"><I.in size={14}/> รับเข้าสต็อก</button>
+              <button className="btn primary"><I.out size={14}/> ใบยืม-เบิก</button>
+            </>
+          ) : (
+            <button className="btn primary sm" onClick={onGoLogin} style={{display:'inline-flex', alignItems:'center', gap:4}}>
+              <I.bolt size={12}/> เข้าสู่ระบบเพื่อทำรายการ
+            </button>
+          )}
         </div>
       </div>
 

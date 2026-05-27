@@ -8,9 +8,10 @@ const { useState: sUseState, useRef: sUseRef } = React;
 
 function SystemPage({ auth, setAuth, onGoLogin }) {
   const [subTab, setSubTab] = sUseState('booking');
+  const [isLoggingIn, setIsLoggingIn] = sUseState(false);
 
-  if (auth.role === 'public') {
-    return <LoginPage setAuth={setAuth}/>;
+  if (auth.role === 'public' && isLoggingIn) {
+    return <LoginPage setAuth={setAuth} onCancel={() => setIsLoggingIn(false)}/>;
   }
 
   const roleColor = auth.role === 'admin' ? 'var(--crimson-500)' : 'var(--navy-600)';
@@ -22,17 +23,30 @@ function SystemPage({ auth, setAuth, onGoLogin }) {
         <div>
           <div className="title">ระบบจัดการภายใน</div>
           <div className="sub">
-            เข้าสู่ระบบในฐานะ <b>{auth.name}</b> · {auth.email}
+            {auth.role === 'public' ? 'บุคคลทั่วไป · ตรวจสอบตารางการจองห้อง' : `เข้าสู่ระบบในฐานะ ${auth.name} · ${auth.email}`}
           </div>
         </div>
         <div className="actions">
-          <span className={"badge " + roleBadge[0]} style={{height: 28, fontSize: 13}}>
-            {auth.role === 'admin' ? <I.crown size={12}/> : <I.bolt size={12}/>}
-            {roleBadge[1]}
-          </span>
-          <button className="btn ghost" onClick={() => setAuth({role:'public',name:'',email:'',phone:''})}>
-            <I.x size={14}/> ออกจากระบบ
-          </button>
+          {auth.role === 'public' ? (
+            <>
+              <span className="badge" style={{height: 28, fontSize: 13, background:'var(--navy-50)', color:'var(--navy-600)', display:'inline-flex', alignItems:'center', gap:4}}>
+                <I.info size={12}/> โหมดบุคคลทั่วไป (ดูเท่านั้น)
+              </span>
+              <button className="btn primary sm" onClick={() => setIsLoggingIn(true)} style={{display:'inline-flex', alignItems:'center', gap:4}}>
+                <I.bolt size={12}/> เข้าสู่ระบบ
+              </button>
+            </>
+          ) : (
+            <>
+              <span className={"badge " + roleBadge[0]} style={{height: 28, fontSize: 13}}>
+                {auth.role === 'admin' ? <I.crown size={12}/> : <I.bolt size={12}/>}
+                {roleBadge[1]}
+              </span>
+              <button className="btn ghost" onClick={() => setAuth({role:'public',name:'',email:'',phone:''})}>
+                <I.x size={14}/> ออกจากระบบ
+              </button>
+            </>
+          )}
         </div>
       </div>
 
@@ -49,22 +63,24 @@ function SystemPage({ auth, setAuth, onGoLogin }) {
             <span className="row" style={{gap:6}}><I.setting size={14}/> จัดการ (Admin)</span>
           </button>
         )}
-        <div style={{marginLeft:'auto', display:'flex', alignItems:'center', gap:8, paddingBottom:4}}>
-          <div style={{
-            width:28, height:28, borderRadius:99,
-            background: roleColor, color:'#fff',
-            display:'grid', placeItems:'center',
-            fontWeight:700, fontSize:12,
-          }}>
-            {auth.name.slice(-2)}
+        {auth.role !== 'public' && (
+          <div style={{marginLeft:'auto', display:'flex', alignItems:'center', gap:8, paddingBottom:4}}>
+            <div style={{
+              width:28, height:28, borderRadius:99,
+              background: roleColor, color:'#fff',
+              display:'grid', placeItems:'center',
+              fontWeight:700, fontSize:12,
+            }}>
+              {auth.name.slice(-2)}
+            </div>
+            <span style={{fontSize:13, color:'var(--text-muted)'}}>{auth.name}</span>
           </div>
-          <span style={{fontSize:13, color:'var(--text-muted)'}}>{auth.name}</span>
-        </div>
+        )}
       </div>
 
       <div style={{marginTop:'var(--gap)'}}>
-        {subTab==='booking'   && <Booking   embedded canApprove={auth.role==='admin'} auth={auth}/>}
-        {subTab==='inventory' && <Inventory embedded canApprove={auth.role==='admin'} auth={auth}/>}
+        {subTab==='booking'   && <Booking   embedded canApprove={auth.role==='admin'} auth={auth} onGoLogin={() => setIsLoggingIn(true)}/>}
+        {subTab==='inventory' && <Inventory embedded canApprove={auth.role==='admin'} auth={auth} onGoLogin={() => setIsLoggingIn(true)}/>}
         {subTab==='manage' && auth.role==='admin' && <AdminPanel auth={auth}/>}
       </div>
     </div>
@@ -72,7 +88,7 @@ function SystemPage({ auth, setAuth, onGoLogin }) {
 }
 
 /* ── Login Page ─────────────────────────────────────── */
-function LoginPage({ setAuth }) {
+function LoginPage({ setAuth, onCancel }) {
   const [email,    setEmail]    = sUseState('');
   const [phone,    setPhone]    = sUseState('');
   const [error,    setError]    = sUseState('');
@@ -210,6 +226,13 @@ function LoginPage({ setAuth }) {
             style={{height:42, fontSize:15, fontWeight:600, marginTop:4, justifyContent:'center', opacity: loading ? 0.7 : 1}}>
             {loading ? '⏳ กำลังตรวจสอบ…' : <><I.bolt size={15}/> เข้าสู่ระบบ</>}
           </button>
+
+          {onCancel && (
+            <button type="button" className="btn ghost" onClick={onCancel}
+              style={{height:42, fontSize:14, fontWeight:600, justifyContent:'center', border:'1px solid var(--border)'}}>
+              <I.chevL size={14}/> กลับไปโหมดบุคคลทั่วไป (ดูปฏิทิน)
+            </button>
+          )}
 
           <div style={{
             borderTop:'1px dashed var(--border)', paddingTop:12,

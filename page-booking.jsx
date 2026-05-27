@@ -6,7 +6,7 @@ const WEEK_DATES = [26, 27, 28, 29, 30, 31, 1];
 const HOURS = [8,9,10,11,12,13,14,15,16,17]; // 10 hours
 const HOUR_H = 48;
 
-function Booking({ viewMode = 'week', embedded = false, canApprove = false, auth = {role:'public'} }) {
+function Booking({ viewMode = 'week', embedded = false, canApprove = false, auth = {role:'public'}, onGoLogin }) {
   const isPublic = auth.role === 'public';
   const [roomFilter, setRoomFilter] = bUseState({ av: true, meeting: true, '8103': true });
   const [showModal, setShowModal] = bUseState(null); // { day, room, h, dur }
@@ -72,6 +72,28 @@ function Booking({ viewMode = 'week', embedded = false, canApprove = false, auth
 
   return (
     <div className={embedded ? '' : 'page'}>
+      {isPublic && (
+        <div style={{
+          background: 'var(--navy-50)',
+          border: '1px solid var(--navy-200)',
+          borderRadius: 'var(--r)',
+          padding: '10px 16px',
+          marginBottom: 16,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 12,
+          flexWrap: 'wrap'
+        }}>
+          <div style={{display: 'flex', alignItems: 'center', gap: 8, fontSize: 13.5, color: 'var(--navy-800)'}}>
+            <I.info size={15} style={{color: 'var(--navy-500)', flexShrink:0}}/>
+            <span>คุณกำลังใช้งานในฐานะ <b>บุคคลทั่วไป (Read-Only)</b> ตรวจสอบตารางเวลาได้เท่านั้น หากต้องการจองห้องกรุณาเข้าสู่ระบบ</span>
+          </div>
+          <button className="btn primary sm" onClick={onGoLogin} style={{display: 'inline-flex', alignItems: 'center', gap: 4, height: 28, fontSize: 12, fontWeight: 600}}>
+            <I.bolt size={12}/> เข้าสู่ระบบเพื่อทำรายการ
+          </button>
+        </div>
+      )}
       <div className="page-head" style={embedded ? {paddingTop: 0} : {}}>
         <div>
           <div className="title">ปฏิทินการใช้ห้อง</div>
