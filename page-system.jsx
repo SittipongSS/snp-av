@@ -6,10 +6,14 @@ const { useState: sUseState, useRef: sUseRef } = React;
    private — จองห้อง + ยืม/คืนได้
    admin   — ทุกอย่าง + เพิ่ม/ลบ/อนุมัติ            */
 
-function SystemPage({ auth, setAuth, onGoLogin }) {
+function SystemPage({ auth, setAuth, onGoLogin, initialLogin }) {
   const [subTab, setSubTab] = sUseState('booking');
-  const [isLoggingIn, setIsLoggingIn] = sUseState(false);
+  const [isLoggingIn, setIsLoggingIn] = sUseState(initialLogin || false);
   const [reports, setReports] = sUseState(window.REPORTS || []);
+
+  React.useEffect(() => {
+    if (initialLogin) setIsLoggingIn(true);
+  }, [initialLogin]);
 
   const handleReportSubmit = (newReport) => {
     const updated = [...reports, { ...newReport, id: 'RP-2568-' + String(reports.length + 1).padStart(3, '0'), status: 'pending' }];
@@ -130,46 +134,6 @@ function LoginPage({ setAuth, onCancel }) {
 
   return (
     <div className="page" style={{alignItems:'center', paddingTop:32}}>
-      {/* Access tiers info */}
-      <div style={{
-        maxWidth:760, width:'100%', marginBottom:24,
-        display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:12,
-      }}>
-        {[
-          { role:'Public',  ico:'users',  color:'var(--navy-200)',  label:'สาธารณะ',
-            items:['ดูข่าวสารประกาศ','ดูรายชื่อบุคลากร','ดูแกลเลอรีผลงาน','ข้อมูลทั่วไป'] },
-          { role:'Private', ico:'bolt',   color:'var(--navy-500)',  label:'ผู้ใช้ระบบ',
-            items:['จองห้องโสตฯ','จองห้องประชุม','ยืม-คืนพัสดุ','ดูสถานะการจอง'] },
-          { role:'Admin',   ico:'crown',  color:'var(--gold-400)',  label:'ผู้ดูแลระบบ',
-            items:['อนุมัติ/ปฏิเสธการจอง','เพิ่ม/ลบพัสดุ','จัดการบัญชีผู้ใช้','ดูรายงานทั้งหมด'] },
-        ].map(tier => {
-          const Ico = I[tier.ico];
-          return (
-            <div key={tier.role} className="card">
-              <div className="row" style={{gap:8, marginBottom:10}}>
-                <div style={{
-                  width:32, height:32, borderRadius:'var(--r)',
-                  background:tier.color, color: tier.color===('var(--gold-400)') ? 'var(--navy-900)' : '#fff',
-                  display:'grid', placeItems:'center',
-                }}>
-                  <Ico size={15}/>
-                </div>
-                <div style={{fontWeight:700, fontFamily:'var(--font-display)', color:'var(--navy-700)'}}>
-                  {tier.label}
-                </div>
-              </div>
-              <div className="col" style={{gap:5}}>
-                {tier.items.map((item,i) => (
-                  <div key={i} style={{fontSize:12.5, color:'var(--text-muted)', display:'flex', gap:6}}>
-                    <I.check size={12} style={{color:'var(--green-500)', flexShrink:0, marginTop:2}}/> {item}
-                  </div>
-                ))}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
       {/* Login card */}
       <div style={{
         maxWidth:420, width:'100%',
