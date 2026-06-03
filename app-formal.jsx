@@ -5,7 +5,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "theme": "light",
   "density": "default",
   "accent": "#c08e10",
-  "fontPair": "sarabun-niramit"
+  "fontPair": "ibm-plex"
 }/*EDITMODE-END*/;
 
 const NAV_PUBLIC = [
@@ -46,6 +46,7 @@ function App() {
     document.documentElement.style.setProperty('--gold-300', adjustHex(t.accent, 1.15));
     document.documentElement.style.setProperty('--gold-500', adjustHex(t.accent, 0.85));
     const fonts = {
+      'ibm-plex':        { body: '"IBM Plex Sans Thai","IBM Plex Sans","Helvetica",sans-serif', display: '"IBM Plex Sans Thai","IBM Plex Sans",Georgia,serif' },
       'sarabun-niramit': { body: '"Sarabun","TH Sarabun PSK","Helvetica",sans-serif', display: '"Niramit","Sarabun",Georgia,serif' },
       'sarabun':         { body: '"Sarabun","Helvetica",sans-serif',                  display: '"Sarabun",Georgia,serif' },
       'prompt':          { body: '"Prompt","Helvetica",sans-serif',                   display: '"Prompt",Georgia,serif' },
@@ -120,13 +121,10 @@ function App() {
               <span className="dot"/>
             </button>
             {isLoggedIn ? (
-              <div className="user-pill">
-                <div className="avatar" style={{
-                  width:26, height:26, fontSize:11, borderRadius:99,
-                  display:'grid', placeItems:'center', fontWeight:700,
-                  background: isAdmin ? 'var(--gold-400)' : 'var(--navy-100)',
-                  color: isAdmin ? 'var(--navy-900)' : 'var(--navy-700)',
-                }}>{auth.name.slice(-2)}</div>
+              <div className="user-pill" style={{ display:'flex', alignItems:'center', gap:8, cursor:'pointer' }}>
+                <div className={"avatar " + (isAdmin ? "avatar-admin" : "avatar-user")}>
+                  {auth.name.slice(-2)}
+                </div>
                 <span className="user-pill-name">{auth.name}</span>
               </div>
             ) : (
@@ -165,10 +163,9 @@ function App() {
         </button>
         {isLoggedIn ? (
           <div className="drawer-user">
-            <div className="drawer-avatar" style={{
-              background: isAdmin ? 'var(--gold-400)' : 'var(--navy-100)',
-              color: isAdmin ? 'var(--navy-900)' : 'var(--navy-700)',
-            }}>{auth.name.slice(-2)}</div>
+            <div className={"drawer-avatar " + (isAdmin ? "avatar-admin" : "avatar-user")}>
+              {auth.name.slice(-2)}
+            </div>
             <div className="drawer-user-info">
               <div className="drawer-user-name">{auth.name}</div>
               <div className="drawer-user-role">{isAdmin ? 'ผู้ดูแลระบบ' : 'ผู้ใช้ระบบ'}</div>
@@ -187,24 +184,8 @@ function App() {
       </div>
 
       {/* ── Access banner ── */}
-      {!isLoggedIn && (
-        <div className="access-banner public">
-          <I.info size={14}/>
-          <span>คุณกำลังดูในฐานะ <b>สาธารณะ (Public)</b></span>
-          <button className="btn sm" onClick={() => navigate('system-login')} style={{
-            marginLeft:'auto', background:'var(--gold-400)', borderColor:'var(--gold-500)',
-            color:'var(--navy-900)', fontWeight:600,
-          }}>
-            <I.bolt size={12}/> <span className="login-text">เข้าสู่ระบบ</span>
-          </button>
-        </div>
-      )}
-      {isLoggedIn && (
-        <div className={"access-banner " + (isAdmin ? 'admin' : 'private')}>
-          {isAdmin ? <I.crown size={13}/> : <I.check size={13}/>}
-          <span className="access-text">เข้าสู่ระบบในฐานะ <b>{auth.name}</b> ({isAdmin ? 'ผู้ดูแลระบบ' : 'ผู้ใช้ระบบ'})</span>
-        </div>
-      )}
+
+
 
       {/* ── Page content ── */}
       <main>
@@ -282,7 +263,7 @@ function App() {
                     onChange={v => setTweak('accent',v)}/>
         <TweakSection label="ฟอนต์"/>
         <TweakSelect label="คู่ฟอนต์" value={t.fontPair}
-                     options={['sarabun-niramit','sarabun','prompt','mitr']}
+                     options={['ibm-plex','sarabun-niramit','sarabun','prompt','mitr']}
                      onChange={v => setTweak('fontPair',v)}/>
         <TweakSection label="เลย์เอาต์"/>
         <TweakRadio label="ความหนาแน่น" value={t.density}

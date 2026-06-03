@@ -136,25 +136,25 @@ function Personnel({ auth = {role:'public'} }) {
             
             <div className="duty-weekly-grid">
               {WEEKLY_SHIFTS.map((w, idx) => (
-                <div key={idx} className="card outline" style={{
+                <div key={idx} className="card" style={{
                   padding: 14,
                   display: 'flex',
                   flexDirection: 'column',
                   gap: 8,
                   background: 'var(--surface)',
-                  border: '1px solid var(--border)',
-                  borderRadius: 'var(--r-lg)',
-                  position: 'relative'
                 }}>
                   <div style={{
-                    fontSize: 14,
-                    fontWeight: 700,
-                    color: 'var(--navy-700)',
-                    fontFamily: 'var(--font-display)',
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
                     borderBottom: '1px solid var(--border)',
                     paddingBottom: 6
                   }}>
-                    {w.day}
+                    <span style={{
+                      fontSize: 14,
+                      fontWeight: 700,
+                      color: 'var(--navy-700)',
+                      fontFamily: 'var(--font-display)',
+                    }}>{w.day}</span>
+                    <span style={{fontSize: 11, color: 'var(--text-subtle)', fontFamily: 'var(--font-mono)'}}>{w.date}</span>
                   </div>
                   
                   <div style={{fontSize: 12}}>
@@ -211,16 +211,14 @@ function Personnel({ auth = {role:'public'} }) {
                 d.loc.toLowerCase().includes(search.toLowerCase()) || 
                 d.staff.some(s => s.name.toLowerCase().includes(search.toLowerCase()))
               ).map((d) => (
-                <div key={d.id} className="card outline" style={{
+                <div key={d.id} className="card" style={{
                   padding: 16,
                   background: d.status === 'completed' ? 'var(--bg-sunken)' : 'var(--surface)',
-                  border: d.status === 'completed' ? '1px solid var(--border)' : '1px solid var(--navy-100)',
-                  borderRadius: 'var(--r-lg)',
+                  border: d.status === 'completed' ? '1px solid var(--border)' : '1px solid var(--navy-200)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: 20,
                   opacity: d.status === 'completed' ? 0.8 : 1,
-                  position: 'relative',
                   overflow: 'hidden'
                 }}>
                   {/* Left Indicator bar */}
@@ -372,6 +370,7 @@ function Inventory({ embedded = false, canApprove = false, auth = {role:'public'
   const [search, setSearch] = pUseState('');
   const [showQR, setShowQR] = pUseState(false);
   const [showItem, setShowItem] = pUseState(null);
+  const [showBorrow, setShowBorrow] = pUseState(false);
 
   const cats = ['all', ...new Set(INVENTORY.map(i => i.cat))];
   const statuses = [
@@ -390,6 +389,23 @@ function Inventory({ embedded = false, canApprove = false, auth = {role:'public'
 
   const totalValue = INVENTORY.reduce((s, i) => s + i.price * i.total, 0);
 
+  if (auth.role === 'public') {
+    return (
+      <div className={embedded ? '' : 'page'} style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: embedded ? '60vh' : '80vh', textAlign: 'center'}}>
+        <div style={{width: 64, height: 64, borderRadius: '50%', background: 'var(--gold-100)', color: 'var(--gold-600)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24}}>
+          <I.box size={32} />
+        </div>
+        <h2 style={{fontFamily: 'var(--font-display)', color: 'var(--navy-800)', marginBottom: 8}}>เฉพาะสมาชิกที่สามารถดูรายการพัสดุได้</h2>
+        <p style={{color: 'var(--text-muted)', maxWidth: 400, lineHeight: 1.6, marginBottom: 24}}>
+          <b>กรุณาเข้าสู่ระบบด้วยสิทธิ์ผู้ใช้ระบบเพื่อดำเนินการยืม-คืนพัสดุ</b> หรือตรวจสอบรายการครุภัณฑ์โสตฯ
+        </p>
+        <button className="btn primary" onClick={onGoLogin} style={{padding: '8px 24px'}}>
+          <I.bolt size={14}/> เข้าสู่ระบบเพื่อทำรายการ
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className={embedded ? '' : 'page'}>
       <div className="page-head" style={embedded ? {paddingTop: 0} : {}}>
@@ -399,161 +415,238 @@ function Inventory({ embedded = false, canApprove = false, auth = {role:'public'
         </div>
         <div className="actions">
           <button className="btn ghost" onClick={() => setShowQR(true)}><I.qr size={14}/> สแกน QR</button>
-          {auth.role !== 'public' ? (
-            <>
-              <button className="btn ghost"><I.in size={14}/> รับเข้าสต็อก</button>
-              <button className="btn primary"><I.out size={14}/> ใบยืม-เบิก</button>
-            </>
-          ) : (
-            <button className="btn primary sm" onClick={onGoLogin} style={{display:'inline-flex', alignItems:'center', gap:4}}>
-              <I.bolt size={12}/> เข้าสู่ระบบเพื่อทำรายการ
-            </button>
-          )}
+          <button className="btn ghost"><I.in size={14}/> รับเข้าสต็อก</button>
+          <button className="btn primary" onClick={() => setShowBorrow(true)}><I.out size={14}/> ใบยืม-เบิก</button>
         </div>
       </div>
 
-      <div className="stat-grid">
-        <div className="stat">
-          <div className="label">รายการในระบบ</div>
-          <div className="value">{INVENTORY.length}</div>
-          <div className="meta">{cats.length - 1} หมวดหมู่</div>
-        </div>
-        <div className="stat">
-          <div className="label">พร้อมให้ยืม</div>
-          <div className="value">{INVENTORY.filter(i => i.status === 'available').length}</div>
-          <div className="meta"><span className="up" style={{color:'var(--green-500)'}}>{Math.round(INVENTORY.filter(i => i.status === 'available').length / INVENTORY.length * 100)}%</span> ของทั้งหมด</div>
-        </div>
-        <div className="stat">
-          <div className="label">กำลังถูกยืม</div>
-          <div className="value">{INVENTORY.filter(i => i.status === 'borrowed').length}</div>
-          <div className="meta">2 รายการเลยกำหนด</div>
-        </div>
-        <div className="stat">
-          <div className="label">ใกล้หมด / หมด</div>
-          <div className="value" style={{color: 'var(--red-500)'}}>{INVENTORY.filter(i => i.status === 'low' || i.status === 'out').length}</div>
-          <div className="meta">ต้องเพิ่มสต็อก</div>
-        </div>
-      </div>
-
-      <div className="table-wrap">
-        <div className="table-tools">
-          <div className="row" style={{gap: 4}}>
-            {cats.map(c => (
-              <button key={c}
-                className={"filter-chip" + (cat === c ? ' active' : '')}
-                onClick={() => setCat(c)}>
-                {c === 'all' ? 'ทุกหมวดหมู่' : c}
-              </button>
-            ))}
+      {auth.role === 'admin' && (
+        <div className="stat-grid">
+          <div className="stat">
+            <div className="label">รายการในระบบ</div>
+            <div className="value">{INVENTORY.length}</div>
+            <div className="meta">{cats.length - 1} หมวดหมู่</div>
           </div>
-          <div style={{width: 1, height: 22, background: 'var(--border)', margin: '0 4px'}}/>
-          <div className="row" style={{gap: 4}}>
-            {statuses.map(s => (
-              <button key={s.id}
-                className={"filter-chip" + (status === s.id ? ' active' : '')}
-                onClick={() => setStatus(s.id)}>
-                {s.label}
-              </button>
-            ))}
+          <div className="stat">
+            <div className="label">พร้อมให้ยืม</div>
+            <div className="value">{INVENTORY.filter(i => i.status === 'available').length}</div>
+            <div className="meta"><span className="up" style={{color:'var(--green-500)'}}>{Math.round(INVENTORY.filter(i => i.status === 'available').length / INVENTORY.length * 100)}%</span> ของทั้งหมด</div>
           </div>
-          <div className="search" style={{marginLeft: 'auto', width: 220}}>
-            <I.search size={13}/>
-            <input placeholder="รหัส / ชื่อพัสดุ…" value={search} onChange={e => setSearch(e.target.value)}/>
+          <div className="stat">
+            <div className="label">กำลังถูกยืม</div>
+            <div className="value">{INVENTORY.filter(i => i.status === 'borrowed').length}</div>
+            <div className="meta">2 รายการเลยกำหนด</div>
+          </div>
+          <div className="stat">
+            <div className="label">ใกล้หมด / หมด</div>
+            <div className="value" style={{color: 'var(--red-500)'}}>{INVENTORY.filter(i => i.status === 'low' || i.status === 'out').length}</div>
+            <div className="meta">ต้องเพิ่มสต็อก</div>
           </div>
         </div>
+      )}
 
-        <table className="tbl">
-          <thead>
-            <tr>
-              <th>รหัส</th>
-              <th>รายการ</th>
-              <th>หมวดหมู่</th>
-              <th>สถานะ</th>
-              <th style={{textAlign: 'right'}}>คงเหลือ</th>
-              <th>การใช้งาน</th>
-              <th style={{textAlign: 'right'}}>มูลค่า</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map(i => {
-              const pct = (i.stock / i.total) * 100;
-              const tone = pct === 0 ? 'red' : pct < 40 ? 'amber' : 'gold';
-              const statusBadge = {
-                available: ['green', 'พร้อมใช้'],
-                borrowed:  ['blue', 'ถูกยืม'],
-                low:       ['amber', 'ใกล้หมด'],
-                out:       ['red', 'หมด'],
-              }[i.status];
-              const IcoComp = I[i.ico] || I.box;
-              return (
-                <tr key={i.id} onClick={() => setShowItem(i)} style={{cursor: 'pointer'}}>
-                  <td className="mono" style={{color: 'var(--text-muted)'}}>{i.id}</td>
-                  <td>
-                    <div className="row" style={{gap: 10}}>
-                      <div style={{
-                        width: 32, height: 32, borderRadius: 7,
-                        background: 'var(--bg-sunken)', color: 'var(--navy-600)',
-                        display: 'grid', placeItems: 'center', flexShrink: 0,
-                      }}><IcoComp size={15}/></div>
-                      <div style={{fontWeight: 500}}>{i.name}</div>
-                    </div>
-                  </td>
-                  <td><span className="badge">{i.cat}</span></td>
-                  <td><span className={"badge " + statusBadge[0]}><span className="dot"/>{statusBadge[1]}</span></td>
-                  <td className="mono" style={{textAlign: 'right'}}>{i.stock}/{i.total}</td>
-                  <td style={{width: 140}}>
-                    <div className={"bar " + tone}><i style={{width: `${pct}%`}}/></div>
-                  </td>
-                  <td className="mono" style={{textAlign: 'right', color: 'var(--text-muted)'}}>{i.price.toLocaleString('th-TH')} ฿</td>
-                  <td><button className="icon-btn"><I.more size={16}/></button></td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="card">
-        <div className="card-head">
-          <h3>รายการยืม-คืนล่าสุด</h3>
-          <button className="btn ghost sm more">ดูประวัติทั้งหมด <I.chevR size={12}/></button>
+      {auth.role === 'admin' && (
+        <div className="table-wrap">
+          <div className="table-tools">
+            <div className="row" style={{gap: 4}}>
+              {cats.map(c => (
+                <button key={c}
+                  className={"filter-chip" + (cat === c ? ' active' : '')}
+                  onClick={() => setCat(c)}>
+                  {c === 'all' ? 'ทุกหมวดหมู่' : c}
+                </button>
+              ))}
+            </div>
+            <div style={{width: 1, height: 22, background: 'var(--border)', margin: '0 4px'}}/>
+            <div className="row" style={{gap: 4}}>
+              {statuses.map(s => (
+                <button key={s.id}
+                  className={"filter-chip" + (status === s.id ? ' active' : '')}
+                  onClick={() => setStatus(s.id)}>
+                  {s.label}
+                </button>
+              ))}
+            </div>
+            <div className="search" style={{marginLeft: 'auto', width: 220}}>
+              <I.search size={13}/>
+              <input placeholder="รหัส / ชื่อพัสดุ…" value={search} onChange={e => setSearch(e.target.value)}/>
+            </div>
+          </div>
+  
+          <table className="tbl">
+            <thead>
+              <tr>
+                <th>รหัส</th>
+                <th>รายการ</th>
+                <th>หมวดหมู่</th>
+                <th>สถานะ</th>
+                <th style={{textAlign: 'right'}}>คงเหลือ</th>
+                <th>การใช้งาน</th>
+                <th style={{textAlign: 'right'}}>มูลค่า</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map(i => {
+                const pct = (i.stock / i.total) * 100;
+                const tone = pct === 0 ? 'red' : pct < 40 ? 'amber' : 'gold';
+                const statusBadge = {
+                  available: ['green', 'พร้อมใช้'],
+                  borrowed:  ['blue', 'ถูกยืม'],
+                  low:       ['amber', 'ใกล้หมด'],
+                  out:       ['red', 'หมด'],
+                }[i.status];
+                const IcoComp = I[i.ico] || I.box;
+                return (
+                  <tr key={i.id} onClick={() => setShowItem(i)} style={{cursor: 'pointer'}}>
+                    <td className="mono" style={{color: 'var(--text-muted)'}}>{i.id}</td>
+                    <td>
+                      <div className="row" style={{gap: 10}}>
+                        <div style={{
+                          width: 32, height: 32, borderRadius: 7,
+                          background: 'var(--bg-sunken)', color: 'var(--navy-600)',
+                          display: 'grid', placeItems: 'center', flexShrink: 0,
+                        }}><IcoComp size={15}/></div>
+                        <div style={{fontWeight: 500}}>{i.name}</div>
+                      </div>
+                    </td>
+                    <td><span className="badge">{i.cat}</span></td>
+                    <td><span className={"badge " + statusBadge[0]}><span className="dot"/>{statusBadge[1]}</span></td>
+                    <td className="mono" style={{textAlign: 'right'}}>{i.stock}/{i.total}</td>
+                    <td style={{width: 140}}>
+                      <div className={"bar " + tone}><i style={{width: `${pct}%`}}/></div>
+                    </td>
+                    <td className="mono" style={{textAlign: 'right', color: 'var(--text-muted)'}}>{i.price.toLocaleString('th-TH')} ฿</td>
+                    <td><button className="icon-btn"><I.more size={16}/></button></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
-        <table className="tbl" style={{margin: '-8px -2px'}}>
-          <thead>
-            <tr>
-              <th>เวลา</th>
-              <th>ประเภท</th>
-              <th>รหัสพัสดุ</th>
-              <th>ผู้ทำรายการ</th>
-              <th>หมายเหตุ</th>
-              <th>กำหนดคืน</th>
-            </tr>
-          </thead>
-          <tbody>
-            {TRANSACTIONS.map((t, i) => {
-              const typeChip = {
-                out:   ['amber', 'ยืม'],
-                in:    ['green', 'คืน'],
-                stock: ['blue',  'รับเข้า'],
-              }[t.type];
-              return (
-                <tr key={i}>
-                  <td className="mono" style={{color: 'var(--text-subtle)'}}>{t.ts}</td>
-                  <td><span className={"badge " + typeChip[0]}><span className="dot"/>{typeChip[1]}</span></td>
-                  <td className="mono">{t.item}</td>
-                  <td>{t.by}</td>
-                  <td style={{color: 'var(--text-muted)'}}>{t.note}</td>
-                  <td className="mono" style={{color: t.due !== '-' && t.due.includes('26') ? 'var(--red-500)' : 'var(--text-subtle)'}}>{t.due}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+      )}
+
+      {auth.role !== 'public' && (
+        <div className="card">
+          <div className="card-head">
+            <h3>รายการยืม-คืนล่าสุด</h3>
+            <button className="btn ghost sm more">ดูประวัติทั้งหมด <I.chevR size={12}/></button>
+          </div>
+          <table className="tbl" style={{margin: '-8px -2px'}}>
+            <thead>
+              <tr>
+                <th>เวลา</th>
+                <th>ประเภท</th>
+                <th>รหัสพัสดุ</th>
+                <th>ผู้ทำรายการ</th>
+                <th>หมายเหตุ</th>
+                <th>กำหนดคืน</th>
+              </tr>
+            </thead>
+            <tbody>
+              {TRANSACTIONS.map((t, i) => {
+                const typeChip = {
+                  out:   ['amber', 'ยืม'],
+                  in:    ['green', 'คืน'],
+                  stock: ['blue',  'รับเข้า'],
+                }[t.type];
+                return (
+                  <tr key={i}>
+                    <td className="mono" style={{color: 'var(--text-subtle)'}}>{t.ts}</td>
+                    <td><span className={"badge " + typeChip[0]}><span className="dot"/>{typeChip[1]}</span></td>
+                    <td className="mono">{t.item}</td>
+                    <td>{t.by}</td>
+                    <td style={{color: 'var(--text-muted)'}}>{t.note}</td>
+                    <td className="mono" style={{color: t.due !== '-' && t.due.includes('26') ? 'var(--red-500)' : 'var(--text-subtle)'}}>{t.due}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {showQR && <QRModal onClose={() => setShowQR(false)}/>}
       {showItem && <ItemModal item={showItem} onClose={() => setShowItem(null)}/>}
+      {showBorrow && <BorrowModal auth={auth} onClose={() => setShowBorrow(false)} />}
+    </div>
+  );
+}
+
+function BorrowModal({ auth, onClose }) {
+  const [date, setDate] = pUseState(new Date().toISOString().split('T')[0]);
+  const [returnDate, setReturnDate] = pUseState('');
+  const [item, setItem] = pUseState('');
+  const [reason, setReason] = pUseState('');
+  const [submitted, setSubmitted] = pUseState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!item || !returnDate || !reason) {
+      alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+      return;
+    }
+    setSubmitted(true);
+    setTimeout(() => onClose(), 1500);
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose} style={{
+      position:'fixed', top:0, left:0, right:0, bottom:0, background:'rgba(0,0,0,0.5)',
+      zIndex:999, display:'flex', alignItems:'center', justifyContent:'center', padding:20
+    }}>
+      <div className="modal-content" onClick={e=>e.stopPropagation()} style={{
+        background:'var(--surface)', width:'100%', maxWidth:500, borderRadius:'var(--r-lg)',
+        boxShadow:'var(--shadow-xl)', overflow:'hidden'
+      }}>
+        <div style={{padding:'20px 24px', borderBottom:'1px solid var(--border)', display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+          <h3 style={{margin:0, fontFamily:'var(--font-display)', fontSize:18}}>ใบยืม-เบิก พัสดุ/ครุภัณฑ์</h3>
+          <button className="icon-btn" onClick={onClose}><I.x size={18}/></button>
+        </div>
+        {submitted ? (
+           <div style={{padding:40, textAlign:'center'}}>
+             <div style={{width:56, height:56, borderRadius:'50%', background:'var(--green-100)', color:'var(--green-600)', margin:'0 auto 16px', display:'flex', alignItems:'center', justifyContent:'center'}}>
+               <I.check size={28}/>
+             </div>
+             <div style={{fontWeight:600, fontSize:16, marginBottom:8}}>ส่งคำขอสำเร็จ</div>
+             <div style={{color:'var(--text-muted)'}}>รอแอดมินอนุมัติการยืมพัสดุ</div>
+           </div>
+        ) : (
+          <form onSubmit={handleSubmit} style={{padding:'24px', display:'flex', flexDirection:'column', gap:16}}>
+            <div className="field">
+              <label>ผู้ทำรายการ (ยืม-เบิก)</label>
+              <input type="text" value={auth?.name || 'ผู้ใช้ระบบ'} disabled style={{background:'var(--bg-sunken)'}}/>
+            </div>
+            <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:16}}>
+              <div className="field">
+                <label>วันที่ยืม</label>
+                <input type="date" value={date} onChange={e=>setDate(e.target.value)} required/>
+              </div>
+              <div className="field">
+                <label>กำหนดคืน</label>
+                <input type="date" value={returnDate} onChange={e=>setReturnDate(e.target.value)} required/>
+              </div>
+            </div>
+            <div className="field">
+              <label>รายการพัสดุที่ต้องการ</label>
+              <select value={item} onChange={e=>setItem(e.target.value)} required>
+                <option value="">-- เลือกรายการ --</option>
+                {window.INVENTORY && window.INVENTORY.filter(i => i.status !== 'out').map(i => (
+                  <option key={i.id} value={i.id}>{i.id} : {i.name} (คงเหลือ {i.stock})</option>
+                ))}
+              </select>
+            </div>
+            <div className="field">
+              <label>เหตุผล / งานที่นำไปใช้</label>
+              <textarea rows={3} value={reason} onChange={e=>setReason(e.target.value)} placeholder="ระบุเหตุผลในการยืม..." required></textarea>
+            </div>
+            <div style={{display:'flex', justifyContent:'flex-end', gap:12, marginTop:8}}>
+              <button type="button" className="btn ghost" onClick={onClose}>ยกเลิก</button>
+              <button type="submit" className="btn primary">ส่งคำขอ</button>
+            </div>
+          </form>
+        )}
+      </div>
     </div>
   );
 }

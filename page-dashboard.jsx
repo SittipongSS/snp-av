@@ -109,8 +109,7 @@ function AdminDashboard({ onNav, auth }) {
                 const Ico = I[item.ico];
                 return (
                   <button key={i} onClick={() => onNav(item.page)} className="btn ghost" style={{
-                    justifyContent:'flex-start', height:40,
-                    border:'1px solid var(--border)', borderRadius:'var(--r)',
+                    justifyContent:'flex-start', height:40
                   }}>
                     <Ico size={14} style={{color:'var(--navy-500)'}}/>
                     <span>{item.label}</span>
@@ -145,10 +144,10 @@ function PublicHome({ onNav, auth = {role:'public'} }) {
               สำหรับทุกกิจกรรมของโรงเรียนสายน้ำผึ้ง
             </div>
             <div className="hero-actions">
-              <button className="btn-pill gold" onClick={() => onNav('system')}>
+              <button className="btn gold" onClick={() => onNav('system')}>
                 <I.cal size={16}/> ดูปฏิทินห้อง
               </button>
-              <button className="btn-pill outline" onClick={() => onNav('info')}>
+              <button className="btn outline" onClick={() => onNav('info')} style={{color:'#fff'}}>
                 <I.info size={16}/> ข่าวสารล่าสุด
               </button>
             </div>
@@ -201,15 +200,83 @@ function PublicHome({ onNav, auth = {role:'public'} }) {
         </div>
       </div>
 
-      {/* ── 3. ภาพเบื้องหลังการทำงาน (แนวแกลลอรี) ── */}
-      <div className="land-section" style={{background:'var(--surface)', borderTop:'1px solid var(--border)', borderBottom:'1px solid var(--border)'}}>
+      {/* ── 3. ตารางเวรปฏิบัติหน้าที่ประจำวัน (ภาพนิ่ง / เทคนิค) ── */}
+      <div className="land-section" style={{background:'var(--surface)', borderTop:'1px solid var(--border)'}}>
+        <div className="land-inner">
+          <div className="section-head section-head-row">
+            <div>
+              <div className="section-title">ตารางเวรปฏิบัติหน้าที่<span className="accent">ประจำวัน</span></div>
+              <div className="section-sub">เวรภาพนิ่ง และเทคนิคประจำวันจันทร์ถึงวันศุกร์ (ภาคเรียนที่ 1/2568)</div>
+            </div>
+            <button className="btn outline" onClick={() => onNav('personnel')} style={{display:'inline-flex', alignItems:'center', gap:6, cursor:'pointer', background:'var(--bg-sunken)'}}>
+              ดูรายชื่อบุคลากร <I.chevR size={14}/>
+            </button>
+          </div>
+          <div className="duty-weekly-grid" style={{marginTop: 24}}>
+            {WEEKLY_SHIFTS.map((w, idx) => (
+              <div key={idx} className="card" style={{
+                padding: 14,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 8,
+                background: 'var(--bg-sunken)',
+              }}>
+                <div style={{
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
+                  borderBottom: '1px solid var(--border)',
+                  paddingBottom: 6
+                }}>
+                  <span style={{
+                    fontSize: 14,
+                    fontWeight: 700,
+                    color: 'var(--navy-700)',
+                    fontFamily: 'var(--font-display)',
+                  }}>{w.day}</span>
+                  <span style={{fontSize: 11, color: 'var(--text-subtle)', fontFamily: 'var(--font-mono)'}}>{w.date}</span>
+                </div>
+                
+                <div style={{fontSize: 12}}>
+                  <div style={{color: 'var(--text-subtle)', fontWeight: 600, fontSize: 11}}>อาจารย์ผู้ดูแลเวร</div>
+                  <div style={{fontWeight: 500, color: 'var(--text-normal)', marginTop: 2}}>{w.teacher}</div>
+                </div>
+                
+                <div style={{fontSize: 12}}>
+                  <div style={{color: 'var(--text-subtle)', fontWeight: 600, fontSize: 11}}>นักเรียนเวรชมรม</div>
+                  <div style={{display: 'flex', flexDirection: 'column', gap: 2, marginTop: 4}}>
+                    {w.students.map((st, i) => (
+                      <div key={i} className="row" style={{gap: 4, alignItems: 'center'}}>
+                        <span className="dot" style={{background: 'var(--gold-400)', width: 6, height: 6, borderRadius: 99}}/>
+                        <span style={{fontWeight: 500}}>{st}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div style={{
+                  fontSize: 11,
+                  color: 'var(--text-muted)',
+                  marginTop: 'auto',
+                  paddingTop: 8,
+                  borderTop: '1px dotted var(--border)',
+                  lineHeight: 1.4
+                }}>
+                  {w.note}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── 4. ภาพเบื้องหลังการทำงาน (แนวแกลลอรี) ── */}
+      <div className="land-section" style={{background:'var(--surface)', borderTop:'1px dotted var(--border)', borderBottom:'1px solid var(--border)'}}>
         <div className="land-inner">
           <div className="section-head section-head-row">
             <div>
               <div className="section-title">เบื้องหลัง<span className="accent">การทำงาน</span></div>
               <div className="section-sub">ภาพการปฏิบัติงานเบื้องหลังความสำเร็จของกิจกรรมต่างๆ ในโรงเรียนสายน้ำผึ้ง</div>
             </div>
-            <button className="btn-pill gold" onClick={() => onNav('gallery')} style={{border:'none', display:'inline-flex', alignItems:'center', gap:6, cursor:'pointer'}}>
+            <button className="btn gold" onClick={() => onNav('gallery')} style={{display:'inline-flex', alignItems:'center', gap:6, cursor:'pointer'}}>
               ดูแกลเลอรีทั้งหมด <I.chevR size={14}/>
             </button>
           </div>
@@ -265,7 +332,7 @@ function PublicHome({ onNav, auth = {role:'public'} }) {
               <div className="section-title">ข่าวประชาสัมพันธ์</div>
               <div className="section-sub">ข่าวประกาศ ล่าสุด และลิงก์ไปยังข้อมูลประชาสัมพันธ์ของโรงเรียน</div>
             </div>
-            <a href="https://www.sainampeung.ac.th/prpublic/" target="_blank" rel="noopener noreferrer" className="btn-pill gold" style={{textDecoration:'none', display:'inline-flex', alignItems:'center', gap:6}}>
+            <a href="https://www.sainampeung.ac.th/prpublic/" target="_blank" rel="noopener noreferrer" className="btn gold" style={{textDecoration:'none', display:'inline-flex', alignItems:'center', gap:6}}>
               ข่าวสารบนเว็บโรงเรียน <I.chevR size={14}/>
             </a>
           </div>

@@ -9,6 +9,13 @@ const { useState: sUseState, useRef: sUseRef } = React;
 function SystemPage({ auth, setAuth, onGoLogin }) {
   const [subTab, setSubTab] = sUseState('booking');
   const [isLoggingIn, setIsLoggingIn] = sUseState(false);
+  const [reports, setReports] = sUseState(window.REPORTS || []);
+
+  const handleReportSubmit = (newReport) => {
+    const updated = [...reports, { ...newReport, id: 'RP-2568-' + String(reports.length + 1).padStart(3, '0'), status: 'pending' }];
+    window.REPORTS = updated;
+    setReports(updated);
+  };
 
   if (auth.role === 'public' && isLoggingIn) {
     return <LoginPage setAuth={setAuth} onCancel={() => setIsLoggingIn(false)}/>;
@@ -29,9 +36,6 @@ function SystemPage({ auth, setAuth, onGoLogin }) {
         <div className="actions">
           {auth.role === 'public' ? (
             <>
-              <span className="badge" style={{height: 28, fontSize: 13, background:'var(--navy-50)', color:'var(--navy-600)', display:'inline-flex', alignItems:'center', gap:4}}>
-                <I.info size={12}/> โหมดบุคคลทั่วไป (ดูเท่านั้น)
-              </span>
               <button className="btn primary sm" onClick={() => setIsLoggingIn(true)} style={{display:'inline-flex', alignItems:'center', gap:4}}>
                 <I.bolt size={12}/> เข้าสู่ระบบ
               </button>
@@ -58,6 +62,9 @@ function SystemPage({ auth, setAuth, onGoLogin }) {
         <button className={"tab"+(subTab==='inventory'?' active':'')} onClick={()=>setSubTab('inventory')}>
           <span className="row" style={{gap:6}}><I.box size={14}/> พัสดุ / ครุภัณฑ์</span>
         </button>
+        <button className={"tab"+(subTab==='report'?' active':'')} onClick={()=>setSubTab('report')}>
+          <span className="row" style={{gap:6}}><I.alert size={14}/> แจ้งปัญหา</span>
+        </button>
         {auth.role === 'admin' && (
           <button className={"tab"+(subTab==='manage'?' active':'')} onClick={()=>setSubTab('manage')}>
             <span className="row" style={{gap:6}}><I.setting size={14}/> จัดการ (Admin)</span>
@@ -81,7 +88,8 @@ function SystemPage({ auth, setAuth, onGoLogin }) {
       <div style={{marginTop:'var(--gap)'}}>
         {subTab==='booking'   && <Booking   embedded canApprove={auth.role==='admin'} auth={auth} onGoLogin={() => setIsLoggingIn(true)}/>}
         {subTab==='inventory' && <Inventory embedded canApprove={auth.role==='admin'} auth={auth} onGoLogin={() => setIsLoggingIn(true)}/>}
-        {subTab==='manage' && auth.role==='admin' && <AdminPanel auth={auth}/>}
+        {subTab==='report'    && <ReportProblem auth={auth} onSubmit={handleReportSubmit} onGoLogin={() => setIsLoggingIn(true)} />}
+        {subTab==='manage' && auth.role==='admin' && <AdminPanel auth={auth} reports={reports} setReports={setReports} />}
       </div>
     </div>
   );
@@ -137,7 +145,7 @@ function LoginPage({ setAuth, onCancel }) {
         ].map(tier => {
           const Ico = I[tier.ico];
           return (
-            <div key={tier.role} className="card plain" style={{border:'1px solid var(--border)'}}>
+            <div key={tier.role} className="card">
               <div className="row" style={{gap:8, marginBottom:10}}>
                 <div style={{
                   width:32, height:32, borderRadius:'var(--r)',
@@ -249,7 +257,7 @@ function LoginPage({ setAuth, onCancel }) {
 }
 
 /* ── Admin Panel ────────────────────────────────────── */
-function AdminPanel({ auth }) {
+function AdminPanel({ auth, reports = [], setReports }) {
   const [pendingBookings] = sUseState([
     { id:'BK-2568-041', room:'ห้องโสตฯ', day:'พุธ 28 พ.ค.', time:'14:00–16:00', who:'ด.ญ.นภัสสร S401', title:'ซ้อมไลฟ์สตรีม', status:'pending' },
     { id:'BK-2568-042', room:'ห้องประชุม', day:'พฤหัส 29 พ.ค.', time:'09:00–10:00', who:'อ.วราภรณ์ T04', title:'ประชุมผู้ปกครอง', status:'pending' },
@@ -278,6 +286,11 @@ function AdminPanel({ auth }) {
           <div className="label">รออนุมัติ (ยืม)</div>
           <div className="value">{pendingBorrow.length}</div>
           <div className="meta">รอดำเนินการ</div>
+        </div>
+        <div className="stat">
+          <div className="label">รอตรวจสอบ (ปัญหา)</div>
+          <div className="value">{reports.filter(r => r.status === 'pending').length}</div>
+          <div className="meta">การแจ้งปัญหา</div>
         </div>
         <div className="stat">
           <div className="label">ผู้ใช้ระบบ</div>
@@ -366,6 +379,57 @@ function AdminPanel({ auth }) {
                   </button>
                   <button className="btn sm" onClick={()=>act(b.id,'rejected')} style={{color:'var(--red-500)', borderColor:'var(--red-500)'}}>
                     <I.x size={12}/> ปฏิเสธ
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Pending Reports */}
+      <div className="card">
+        <div className="card-head">
+          <h3>จัดการแจ้งปัญหาอุปกรณ์</h3>
+          <span className="badge amber">{reports.filter(r=>r.status === 'pending').length} รอดำเนินการ</span>
+        </div>
+        <div className="col" style={{gap:8}}>
+          {reports.map(r => (
+            <div key={r.id} style={{
+              display:'grid', gridTemplateColumns:'auto 1fr auto', gap:12,
+              alignItems:'center', padding:'12px 14px',
+              background: r.status === 'resolved' ? 'var(--green-50)'
+                        : r.status === 'working' ? 'var(--gold-50)' : 'var(--bg-sunken)',
+              borderRadius:'var(--r)',
+              border:`1px solid ${r.status === 'resolved'?'var(--green-500)':r.status === 'working'?'var(--gold-500)':'var(--border)'}`,
+            }}>
+              <div className="mono" style={{fontSize:11, color:'var(--text-subtle)', minWidth:90}}>{r.id}</div>
+              <div>
+                <div style={{fontWeight:600, fontSize:13.5}}>
+                  <span style={{color: 'var(--navy-600)'}}>{r.location}</span> — {r.item}
+                </div>
+                <div style={{fontSize:12, color:'var(--text-muted)'}}>{r.description}</div>
+                <div style={{fontSize:11, color:'var(--text-subtle)', marginTop: 4}}>แจ้งเมื่อ {r.date} โดย {r.reporter} ({r.department})</div>
+              </div>
+              {r.status !== 'pending' ? (
+                <span className={"badge "+(r.status==='resolved'?'green':'amber')}>
+                  <span className="dot"/>{r.status==='resolved'?'แก้ไขเรียบร้อย':'กำลังดำเนินการ'}
+                </span>
+              ) : (
+                <div className="row" style={{gap:6}}>
+                  <button className="btn sm" onClick={() => {
+                    const updated = reports.map(x => x.id === r.id ? {...x, status: 'working'} : x);
+                    setReports(updated);
+                    window.REPORTS = updated;
+                  }} style={{color:'var(--gold-600)', borderColor:'var(--gold-500)', background:'var(--gold-50)'}}>
+                    <I.check size={12}/> รับเรื่อง
+                  </button>
+                  <button className="btn sm primary" onClick={() => {
+                    const updated = reports.map(x => x.id === r.id ? {...x, status: 'resolved'} : x);
+                    setReports(updated);
+                    window.REPORTS = updated;
+                  }} style={{background:'var(--green-500)', borderColor:'var(--green-500)'}}>
+                    <I.check size={12}/> แก้ไขเสร็จสิ้น
                   </button>
                 </div>
               )}

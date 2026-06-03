@@ -50,6 +50,7 @@ const I = {
   play:    (p) => <Icon {...p} d={<><polygon points="6 3 20 12 6 21 6 3" fill="currentColor"/></>} />,
   mapPin:  (p) => <Icon {...p} d={<><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></>} />,
   user:    (p) => <Icon {...p} d={<><path d="M19 21v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></>} />,
+  alert:   (p) => <Icon {...p} d={<><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></>} />,
 };
 
 window.I = I;

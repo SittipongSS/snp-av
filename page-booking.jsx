@@ -72,45 +72,29 @@ function Booking({ viewMode = 'week', embedded = false, canApprove = false, auth
 
   return (
     <div className={embedded ? '' : 'page'}>
-      {isPublic && (
-        <div style={{
-          background: 'var(--navy-50)',
-          border: '1px solid var(--navy-200)',
-          borderRadius: 'var(--r)',
-          padding: '10px 16px',
-          marginBottom: 16,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 12,
-          flexWrap: 'wrap'
-        }}>
-          <div style={{display: 'flex', alignItems: 'center', gap: 8, fontSize: 13.5, color: 'var(--navy-800)'}}>
-            <I.info size={15} style={{color: 'var(--navy-500)', flexShrink:0}}/>
-            <span>คุณกำลังใช้งานในฐานะ <b>บุคคลทั่วไป (Read-Only)</b> ตรวจสอบตารางเวลาได้เท่านั้น หากต้องการจองห้องกรุณาเข้าสู่ระบบ</span>
-          </div>
-          <button className="btn primary sm" onClick={onGoLogin} style={{display: 'inline-flex', alignItems: 'center', gap: 4, height: 28, fontSize: 12, fontWeight: 600}}>
-            <I.bolt size={12}/> เข้าสู่ระบบเพื่อทำรายการ
-          </button>
-        </div>
-      )}
+
       <div className="page-head" style={embedded ? {paddingTop: 0} : {}}>
         <div>
           <div className="title">ปฏิทินการใช้ห้อง</div>
           <div className="sub">{isPublic ? 'ห้องโสตฯ · ห้องประชุม · ห้อง 8103' : 'ลากเลือกช่วงเวลาในตารางเพื่อจอง · ห้องโสตฯ · ห้องประชุม · ห้อง 8103'}</div>
         </div>
-        {!isPublic && (
-          <div className="actions">
-            <button className="btn ghost"><I.filter size={14}/> ตัวกรอง</button>
-            <button className="btn primary" onClick={() => setShowModal({ day: 0, h: 9, dur: 1, room: 'av' })}>
-              <I.plus size={14}/> จองใหม่
-            </button>
-          </div>
-        )}
+        <div className="actions">
+          <button className="btn ghost"><I.filter size={14}/> ตัวกรอง</button>
+          <button className="btn primary" onClick={() => {
+            if (isPublic) {
+              alert('กรุณาเข้าสู่ระบบด้วยสิทธิ์ผู้ใช้ระบบเพื่อดำเนินการจองห้อง');
+              if (onGoLogin) onGoLogin();
+            } else {
+              setShowModal({ day: 0, h: 9, dur: 1, room: 'av' });
+            }
+          }}>
+            <I.plus size={14}/> จองใหม่
+          </button>
+        </div>
       </div>
 
-      {/* Room cards summary — hidden for public */}
-      {!isPublic && <div className="stat-grid" style={{gridTemplateColumns: 'repeat(3, 1fr)'}}>
+      {/* Room cards summary — hidden for non-admins */}
+      {auth.role === 'admin' && <div className="stat-grid" style={{gridTemplateColumns: 'repeat(3, 1fr)'}}>
         {ROOMS.map(r => {
           const used = bookings.filter(b => b.room === r.id).reduce((s,b) => s + b.dur, 0);
           const total = 7 * 10;
